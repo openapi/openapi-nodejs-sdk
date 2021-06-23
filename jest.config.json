@@ -4,6 +4,7 @@
   },
   "testRegex": "/test/.*",
   "testEnvironment": "node",
+  "setupFiles": ["dotenv/config"],
   "moduleFileExtensions": [
     "ts",
     "js"

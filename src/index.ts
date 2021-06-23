@@ -10,14 +10,20 @@ export interface ScopeObject {
 }
 
 class OpenApi {
-    client: AxiosInstance;
+    client?: AxiosInstance;
     environment: Environment;
+    token?: string;
+    username: string;
+    apiKey: string;
+    autoRenew: boolean;
     scopes: Array<ScopeObject> = [];
 
-    constructor(token: string,  environment: Environment = 'production', scopes: Array<ScopeObject | string>) {
-        // this.username = username;
+    constructor(scopes: Array<ScopeObject | string>, environment: Environment, username: string, apiKey: string, autoRenew = true) {
+        this.username = username;
+        this.apiKey = apiKey;
         this.environment = environment;
 
+        if (!scopes.length) throw new Error('missing scopes');
         scopes.forEach(scope => {
             if (typeof scope === 'object' ) {
                 this.scopes.push(scope);
@@ -28,59 +34,74 @@ class OpenApi {
                 //@ts-ignore
                 this.scopes.push({ mode: scope.split(':', 1), domain: url[0], method: url[1] });
             }
-        })
-
-        this.client = axios.create({
-            headers: { 'Authorization': 'Bearer ' + token }
         });
+
+        this.autoRenew = autoRenew;
+        return this;
     }
 
-    static async generateToken(username: string, apiKey: string, requestScopes: Array<ScopeObject | string>, environment: Environment, expire?: number) {
-        let scopes: Array<string> = [];
-        const prefix = environment === 'test'? 'test.' : '';
+    /**
+     * Crea il client di connessione con OpenApi
+     * Se l'autoRenew è attivo, controllerá lo stato del token
+     * prima di istanzianziare il client
+     */
+    async createClient(token: string) {
+        this.token = token;
 
-        requestScopes.forEach(scope => {
-            if (typeof scope === 'string')  {
-                const split = scope.split(':', 2)
-                scopes.push(`${split[0]}:${prefix}${split[1]}`);
-            } 
-            
-            else if (typeof scope === 'object') {
-                scopes.push(`${scope.mode}:)${prefix}${scope.domain}/${scope.method}`);
+        if (this.autoRenew) {
+            try {
+                const tokenData = await axios.get(this.getOauthUrl() + '/token/' + token, { 
+                    auth: { username: this.username, password: this.apiKey }
+                });
+
+                if (tokenData.data.expire < ((Math.floor(Date.now() / 1000) + (86400 * 15)))) {
+                    await this.renewToken();
+                }
+            } catch (err) {
+                throw err;
             }
+        }
+
+        this.client = axios.create({
+            headers: { 'Authorization': 'Bearer ' + this.token }
         });
 
-        if (!scopes.length) throw new Error('missing scopes')
+        return this;
+    }
+
+    async renewToken() {
+        return await axios.patch(this.getOauthUrl() + '/token/' + this.token);
+    }
+
+    /**
+     * Genera un token 
+     */
+    async generateToken(expire?: number): Promise<string> {
+        if (!this.username || !this.apiKey) throw 'username and apiKey needed';
+
+        let scopes: Array<string> = [];
+        const prefix = this.environment === 'test'? 'test.' : '';
+
+        this.scopes.forEach(scope => scopes.push(`${scope.mode}:${prefix}${scope.domain}/${scope.method}`));
         
         try {
             const body =  expire ? { scopes, expire } : { scopes };
-            const res: any = await axios.post(this.getOauthUrl(environment) + '/token', { scopes, body }, {
-                auth: { username, password: apiKey }
+            
+            const res: any = await axios.post(this.getOauthUrl() + '/token', JSON.stringify(body), {
+                auth: { username: this.username, password: this.apiKey }
             });
 
             if (!res?.data?.success) throw 'Server responded with a status error';
-            return res.data;
+            return res.data.token;
 
         } catch(err) {
             throw err;
         }
-
     }
 
-    static getOauthUrl(environment: Environment) {
-        return 'https://'+( environment === 'test' ? 'test.': '') +'oauth.altravia.com';
+    getOauthUrl() {
+        return 'https://'+( this.environment === 'test' ? 'test.': '') +'oauth.altravia.com';
     }
-
-    static async init(token: string,  environment: Environment = 'production') {
-        let tokenData;
-        try {
-            tokenData = await axios.get(this.getOauthUrl(environment) + '/token/' + token);
-        } catch (err) {
-            throw err;
-        }
-        
-        return new OpenApi(token, environment, tokenData.data.scopes)
-    }   
 }
 
 export default OpenApi;

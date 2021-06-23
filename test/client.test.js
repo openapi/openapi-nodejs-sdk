@@ -1,4 +1,5 @@
-import OpenApi from '../src/index';
+// import OpenApi from '../dist/index';
+let OpenApi = require('../dist/index').default;
 
 const scopes = [
     "GET:ws.ufficiopostale.com/raccomandate",
@@ -29,10 +30,22 @@ const scopes = [
     "POST:ws.marchetemporali.com/analisi",
 ];
 
-
 test('init', async function() {
-    const token = await OpenApi.generateToken(OPENAPI_USERNAME, env.API_KEY, scopes, 'production');
-    console.log(token);
     
-    expect(typeof token.token === 'string').toBe(true);
+    let client = new OpenApi(scopes, 'test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+    
+    const token = await client.generateToken();
+
+    client.createClient(token);
 })
+
+test('initWithToken', async function() {
+    
+    let client = new OpenApi(scopes, 'test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+    
+    const token = process.env.TOKEN;
+    expect(typeof token === 'string').toBe(true);
+
+    client.createClient(token);
+})
+
