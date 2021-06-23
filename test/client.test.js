@@ -30,39 +30,40 @@ const scopes = [
     "POST:ws.marchetemporali.com/analisi",
 ];
 
-test('init', async function() {
+// test('init', async function() {
     
-    let client = new OpenApi(scopes, 'test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+//     let client = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
     
-    const token = await client.generateToken();
+//     const token = await client.generateToken(scopes);
 
-    await client.createClient(token);
-})
+//     await client.createClient(token);
+// })
 
 // test('initWithToken', async function() {
     
-//     let client = new OpenApi(scopes, 'test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+//     let client = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
     
 //     const token = process.env.TOKEN;
 //     expect(typeof token === 'string').toBe(true);
 
 //     await client.createClient(token);
+//     expect(client.comuni).toBeDefined();
 // })
 
 // test('initWithOldToken', async function() {
     
-//     let client = new OpenApi(scopes, 'test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+//     let client = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
     
 //     const token = process.env.OLD_TOKEN;
 //     expect(typeof token === 'string').toBe(true);
 
 //     await client.createClient(token);
-//     client.comuni.test
+//     expect(client.comuni).toBeDefined()
 // })
 
 // test('testComuni', async function() {
     
-//     let client = new OpenApi(scopes, 'test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+//     let client = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
     
 //     const token = process.env.TOKEN;
 //     expect(typeof token === 'string').toBe(true);
@@ -72,6 +73,27 @@ test('init', async function() {
 //     expect(cap[0].regione).toBeDefined();
     
 //     const codice = await client.comuni.getCitiesByCap('00121')
-//     console.log(codice);
 //     expect(codice[0].regione).toBeDefined();
+    
+//     const province = await client.comuni.getProvincie();
+//     expect(province).toBeDefined();
+    
+//     const istat = await client.comuni.getFromIstatCode('055032');
+//     expect(istat).toBeDefined();
 // })
+
+test('testImprese', async function() {
+    
+    let client = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+    
+    const token = await client.generateToken(scopes);
+    expect(typeof token === 'string').toBe(true);
+
+    await client.createClient(token);
+    const piva = await client.imprese.getByPartitaIva('12485671007')
+    expect(piva).toBeDefined();
+    console.log(piva);
+    
+    const pivaAvd = await client.imprese.getAdvancedByPartitaIva('12485671007')
+    expect(pivaAvd).toBeDefined();
+})
