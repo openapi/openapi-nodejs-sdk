@@ -49,13 +49,14 @@ class OpenApi {
         this.token = token;
 
         if (this.autoRenew) {
+            
             try {
                 const tokenData = await axios.get(this.getOauthUrl() + '/token/' + token, { 
                     auth: { username: this.username, password: this.apiKey }
                 });
-
-                if (tokenData.data.expire < ((Math.floor(Date.now() / 1000) + (86400 * 15)))) {
-                    await this.renewToken();
+                
+                if (tokenData.data.data[0].expire < ((Math.floor(Date.now() / 1000) + (86400 * 15)))) {
+                    await this.renewToken(this.token);
                 }
             } catch (err) {
                 throw err;
@@ -69,8 +70,10 @@ class OpenApi {
         return this;
     }
 
-    async renewToken() {
-        return await axios.patch(this.getOauthUrl() + '/token/' + this.token);
+    async renewToken(token: string) {
+        return await axios.patch(this.getOauthUrl() + '/token/' + token, { expire: 86400 + 365 }, {
+            auth: { username: this.username, password: this.apiKey }
+        });
     }
 
     /**

@@ -36,7 +36,7 @@ test('init', async function() {
     
     const token = await client.generateToken();
 
-    client.createClient(token);
+   await client.createClient(token);
 })
 
 test('initWithToken', async function() {
@@ -46,6 +46,15 @@ test('initWithToken', async function() {
     const token = process.env.TOKEN;
     expect(typeof token === 'string').toBe(true);
 
-    client.createClient(token);
+    await client.createClient(token);
 })
 
+test('initWithOldToken', async function() {
+    
+    let client = new OpenApi(scopes, 'test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+    
+    const token = process.env.OLD_TOKEN;
+    expect(typeof token === 'string').toBe(true);
+
+    await client.createClient(token);
+})
