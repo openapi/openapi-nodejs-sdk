@@ -35,7 +35,7 @@ export class Comuni implements Service {
     }
 
     async getComuni(provincia?: string) {
-        const comuni: Array<any> = await (await this.client.get(this.url + '/comuni' + provincia)).data.data;\
+        const comuni: Array<any> = await (await this.client.get(this.url + '/comuni' + provincia)).data.data;
         return comuni.sort();
     }
 

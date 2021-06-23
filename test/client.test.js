@@ -30,14 +30,14 @@ const scopes = [
     "POST:ws.marchetemporali.com/analisi",
 ];
 
-// test('init', async function() {
+test('init', async function() {
     
-//     let client = new OpenApi(scopes, 'test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+    let client = new OpenApi(scopes, 'test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
     
-//     const token = await client.generateToken();
+    const token = await client.generateToken();
 
-//    await client.createClient(token);
-// })
+    await client.createClient(token);
+})
 
 // test('initWithToken', async function() {
     
@@ -60,18 +60,18 @@ const scopes = [
 //     client.comuni.test
 // })
 
-test('testComuni', async function() {
+// test('testComuni', async function() {
     
-    let client = new OpenApi(scopes, 'test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+//     let client = new OpenApi(scopes, 'test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
     
-    const token = process.env.TOKEN;
-    expect(typeof token === 'string').toBe(true);
+//     const token = process.env.TOKEN;
+//     expect(typeof token === 'string').toBe(true);
 
-    await client.createClient(token);
-    const cap = await client.comuni.getCitiesByCap('00121')
-    expect(cap[0].regione).toBeDefined();
+//     await client.createClient(token);
+//     const cap = await client.comuni.getCitiesByCap('00121')
+//     expect(cap[0].regione).toBeDefined();
     
-    const codice = await client.comuni.getCitiesByCap('00121')
-    console.log(codice);
-    expect(codice[0].regione).toBeDefined();
-})
+//     const codice = await client.comuni.getCitiesByCap('00121')
+//     console.log(codice);
+//     expect(codice[0].regione).toBeDefined();
+// })
