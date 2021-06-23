@@ -86,14 +86,18 @@ test('testImprese', async function() {
     
     let client = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
     
-    const token = await client.generateToken(scopes);
+    const token = process.env.TOKEN;
     expect(typeof token === 'string').toBe(true);
 
     await client.createClient(token);
-    const piva = await client.imprese.getByPartitaIva('12485671007')
-    expect(piva).toBeDefined();
-    console.log(piva);
+    // const piva = await client.imprese.getByPartitaIva('12485671007')
+    // expect(piva).toBeDefined();
+    // console.log(piva);
     
-    const pivaAvd = await client.imprese.getAdvancedByPartitaIva('12485671007')
-    expect(pivaAvd).toBeDefined();
+    // const pivaAvd = await client.imprese.getAdvancedByPartitaIva('12485671007')
+    // expect(pivaAvd).toBeDefined();
+    
+    const pec = await client.imprese.getPec('12485671007')
+    expect(pec).toBeDefined();
+    console.log(pec);
 })

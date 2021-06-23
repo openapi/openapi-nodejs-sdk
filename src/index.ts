@@ -42,7 +42,7 @@ class OpenApi {
     /**
      * Crea il client di connessione con OpenApi
      * Se l'autoRenew è attivo, controllerá lo stato del token
-     * prima di istanzianziare il client
+     * prima di istanziare il client, ed in caso lo rinnoverà
      */
     async createClient(token: string) {
         this.token = token;
