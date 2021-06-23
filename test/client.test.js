@@ -68,6 +68,10 @@ test('testComuni', async function() {
     expect(typeof token === 'string').toBe(true);
 
     await client.createClient(token);
-    const cap = client.comuni.getCitiesByCap('00121')
-    expect(cap).resolves.toBeDefined();
+    const cap = await client.comuni.getCitiesByCap('00121')
+    expect(cap[0].regione).toBeDefined();
+    
+    const codice = await client.comuni.getCitiesByCap('00121')
+    console.log(codice);
+    expect(codice[0].regione).toBeDefined();
 })
