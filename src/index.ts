@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from "axios";
+import { Comuni } from "./Services/Comuni";
 
 export type Environment = 'test'| 'production';
 
@@ -9,6 +10,14 @@ export interface ScopeObject {
     mode: ValidHttpMethod;
 }
 
+export type ServiceName = 'comuni';
+export interface Service {
+    client: AxiosInstance;
+    service: ServiceName;
+    baseUrl: string;
+    environment: Environment;
+}
+
 class OpenApi {
     client?: AxiosInstance;
     environment: Environment;
@@ -17,6 +26,9 @@ class OpenApi {
     apiKey: string;
     autoRenew: boolean;
     scopes: Array<ScopeObject> = [];
+
+    comuni?: Comuni;
+
 
     constructor(scopes: Array<ScopeObject | string>, environment: Environment, username: string, apiKey: string, autoRenew = true) {
         this.username = username;
@@ -37,9 +49,10 @@ class OpenApi {
         });
 
         this.autoRenew = autoRenew;
+        
         return this;
     }
-
+    
     /**
      * Crea il client di connessione con OpenApi
      * Se l'autoRenew è attivo, controllerá lo stato del token
@@ -47,7 +60,7 @@ class OpenApi {
      */
     async createClient(token: string) {
         this.token = token;
-
+        
         if (this.autoRenew) {
             
             try {
@@ -62,14 +75,20 @@ class OpenApi {
                 throw err;
             }
         }
-
+        
         this.client = axios.create({
             headers: { 'Authorization': 'Bearer ' + this.token }
         });
 
+        [Comuni].forEach(service => {
+            //@ts-ignore
+            const s = new service(this.scopes, this.client, this.environment);
+            this[s.service] = s;
+        });
+        
         return this;
     }
-
+    
     async renewToken(token: string) {
         return await axios.patch(this.getOauthUrl() + '/token/' + token, { expire: 86400 + 365 }, {
             auth: { username: this.username, password: this.apiKey }
