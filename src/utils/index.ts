@@ -5,3 +5,7 @@ export function isServiceInScopes(scopes: Array<ScopeObject>, baseUrl: string) {
         return scope.domain === baseUrl;
     });
 }
+
+export function getBaseUrl(env: string, baseUrl: string) {
+    return 'https://' + ((env === 'test' ) ? 'test.' : '') + baseUrl;
+}

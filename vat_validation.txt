@@ -1,9 +1,0 @@
-[FRAGMENT 4 of 17]
-
-The game Miyamoto created was Donkey Kong, released in 1981. Its protagonist
-needed a name, and Miyamoto first called him Jumpman — a descriptor that captured
-his one defining ability. The character's visual design was dictated entirely by
-the technical limitations of the hardware: each sprite could only be a small
-cluster of pixels on an 8-bit screen.
-
-Every constraint became an opportunity.
