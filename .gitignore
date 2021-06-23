@@ -119,3 +119,5 @@ dist
 
 ## Custom 
 .env*
+*.code-workspace
+.vscode
