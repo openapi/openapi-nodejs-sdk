@@ -18,7 +18,7 @@ export class Comuni implements Service {
     }
 
     async getComuneByCatasto(codiceCatastale: string) {
-        return await (await this.client.get(this.url + '/catastale' + codiceCatastale)).data.data;
+        return await (await this.client.get(this.url + '/catastale/' + codiceCatastale)).data.data;
     }
 
     async getRegioni() {
@@ -27,16 +27,24 @@ export class Comuni implements Service {
         return regioni.sort();
     }
 
+    /**
+     * @return Ritorna un oggetto chiave-valore delle province,
+     * definito come { codice_privicia: nome_provincia }
+     */
     async getProvincie(regione?: string) {
         const province: Array<any> = await (await this.client.get(this.url + '/province' + (regione ? regione : '')))
             .data.data;
-
-        return province.sort();
+        
+        return province;
     }
 
     async getComuni(provincia?: string) {
         const comuni: Array<any> = await (await this.client.get(this.url + '/comuni' + provincia)).data.data;
         return comuni.sort();
+    }
+
+    async getFromIstatCode(code: string | number): Promise<Array<any>> {
+        return await (await this.client.get(this.url + '/istat/' + code)).data.data;
     }
 
     get url() {
