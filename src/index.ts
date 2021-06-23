@@ -1,5 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 import { Comuni } from "./Services/Comuni";
+import { Imprese } from "./Services/Imprese";
+import { isServiceInScopes } from "./utils";
 
 export type Environment = 'test'| 'production';
 
@@ -10,7 +12,7 @@ export interface ScopeObject {
     mode: ValidHttpMethod;
 }
 
-export type ServiceName = 'comuni';
+export type ServiceName = 'comuni' | 'imprese';
 export interface Service {
     client: AxiosInstance;
     service: ServiceName;
@@ -28,29 +30,13 @@ class OpenApi {
     scopes: Array<ScopeObject> = [];
 
     comuni?: Comuni;
+    imprese?: Imprese;
 
-
-    constructor(scopes: Array<ScopeObject | string>, environment: Environment, username: string, apiKey: string, autoRenew = true) {
+    constructor(environment: Environment, username: string, apiKey: string, autoRenew = true) {
         this.username = username;
         this.apiKey = apiKey;
         this.environment = environment;
-
-        if (!scopes.length) throw new Error('missing scopes');
-        scopes.forEach(scope => {
-            if (typeof scope === 'object' ) {
-                this.scopes.push(scope);
-            }
-
-            else if (typeof scope === 'string') {
-                const url = scope.split(':', 2)[1].split('/', 2);
-                //@ts-ignore
-                this.scopes.push({ mode: scope.split(':', 1), domain: url[0], method: url[1] });
-            }
-        });
-
         this.autoRenew = autoRenew;
-        
-        return this;
     }
     
     /**
@@ -61,29 +47,46 @@ class OpenApi {
     async createClient(token: string) {
         this.token = token;
         
-        if (this.autoRenew) {
+        try {
+            const tokenData = await axios.get(this.getOauthUrl() + '/token/' + token, { 
+                auth: { username: this.username, password: this.apiKey }
+            });
+
             
-            try {
-                const tokenData = await axios.get(this.getOauthUrl() + '/token/' + token, { 
-                    auth: { username: this.username, password: this.apiKey }
-                });
-                
-                if (tokenData.data.data[0].expire < ((Math.floor(Date.now() / 1000) + (86400 * 15)))) {
+            if (tokenData.status === 200 ) {
+                if (!this.scopes.length) {
+                    const scopes: Array<any> = tokenData.data.data[0].scopes;
+                    scopes.forEach(scope => {
+                        const url = scope.split(':', 2)[1].split('/', 2);
+                        //@ts-ignore
+                        this.scopes.push({ mode: scope.split(':', 1), domain: url[0], method: url[1] });
+                    })
+                }
+
+                if (this.autoRenew && tokenData.data.data[0].expire < ((Math.floor(Date.now() / 1000) + (86400 * 15)))) {
                     await this.renewToken(this.token);
                 }
-            } catch (err) {
-                throw err;
             }
+            
+
+            else if (tokenData.status === 204) {
+                throw 'The provided token does not exists or it was deleted'
+            }
+        } catch (err) {
+            throw err;
         }
-        
+
         this.client = axios.create({
             headers: { 'Authorization': 'Bearer ' + this.token }
         });
 
-        [Comuni].forEach(service => {
+        [Comuni, Imprese].forEach(service => {
             //@ts-ignore
             const s = new service(this.scopes, this.client, this.environment);
-            this[s.service] = s;
+            if (isServiceInScopes(this.scopes, s.baseUrl)) {
+                //@ts-ignore
+                this[s.service] = s;
+            }
         });
         
         return this;
@@ -99,18 +102,23 @@ class OpenApi {
      * Genera un token 
      * @param expire il timestap di scadenza del token, default: un anno
      */
-    async generateToken(expire: number = 86400 * 365): Promise<string> {
+    async generateToken(scopes: Array<string>, expire: number = 86400 * 365): Promise<string> {
         if (!this.username || !this.apiKey) throw 'username and apiKey needed';
-
-        let scopes: Array<string> = [];
         const prefix = this.environment === 'test'? 'test.' : '';
+        let requestScopes: Array<string> = [];
 
-        this.scopes.forEach(scope => scopes.push(`${scope.mode}:${prefix}${scope.domain}/${scope.method}`));
-        
+        scopes.forEach(scope => {
+            const url = scope.split(':', 2)[1].split('/', 2);
+            //@ts-ignore
+            this.scopes.push({ mode: scope.split(':', 1), domain: url[0], method: url[1] });
+            requestScopes.push(`${scope.split(':', 1)}:${prefix}${url[0]}/${url[1]}`)
+        });
+
         try {
-            const res: any = await axios.post(this.getOauthUrl() + '/token', JSON.stringify({ scopes, expire }), {
+            const res: any = await axios.post(this.getOauthUrl() + '/token', JSON.stringify({ scopes: requestScopes, expire }), {
                 auth: { username: this.username, password: this.apiKey }
             });
+            
 
             if (!res?.data?.success) throw 'Server responded with a status error';
             return res.data.token;
