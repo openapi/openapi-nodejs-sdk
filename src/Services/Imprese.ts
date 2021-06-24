@@ -1,14 +1,14 @@
 import axios, { AxiosInstance } from "axios";
-import { Environment, ScopeObject, Service, ServiceName } from "..";
+import { Environment, Service, } from "..";
 import { getBaseUrl } from "../utils";
 
 export class Imprese implements Service {
     client: AxiosInstance;
-    service: ServiceName = 'imprese';
+    readonly service = 'imprese';
     baseUrl = 'imprese.altravia.com';
     environment: Environment;
 
-    constructor(scopes: Array<ScopeObject>, client: AxiosInstance, environment: Environment) {
+    constructor(client: AxiosInstance, environment: Environment) {
         this.client = client;
         this.environment = environment;
     }

@@ -96,7 +96,6 @@ test('testImprese', async function() {
     
     // const pivaAvd = await client.imprese.getAdvancedByPartitaIva('12485671007')
     // expect(pivaAvd).toBeDefined();
-    
     const pec = await client.imprese.getPec('12485671007')
     expect(pec).toBeDefined();
     console.log(pec);

@@ -12,10 +12,9 @@ export interface ScopeObject {
     mode: ValidHttpMethod;
 }
 
-export type ServiceName = 'comuni' | 'imprese';
 export interface Service {
     client: AxiosInstance;
-    service: ServiceName;
+    service: string;
     baseUrl: string;
     environment: Environment;
 }
@@ -44,7 +43,7 @@ class OpenApi {
      * Se l'autoRenew è attivo, controllerá lo stato del token
      * prima di istanziare il client, ed in caso lo rinnoverà
      */
-    async createClient(token: string) {
+    async createClient(token: string, skipCheck = false) {
         this.token = token;
         
         try {
@@ -82,8 +81,8 @@ class OpenApi {
 
         [Comuni, Imprese].forEach(service => {
             //@ts-ignore
-            const s = new service(this.scopes, this.client, this.environment);
-            if (isServiceInScopes(this.scopes, s.baseUrl)) {
+            const s = new service(this.client, this.environment);
+            if (skipCheck || isServiceInScopes(this.scopes, s.baseUrl)) {
                 //@ts-ignore
                 this[s.service] = s;
             }
