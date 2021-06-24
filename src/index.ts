@@ -100,9 +100,9 @@ class OpenApi {
 
     /**
      * Genera un token 
-     * @param expire il timestap di scadenza del token, default: un anno
+     * @param expire valore in giorni alla di scadenza del token, default: un anno
      */
-    async generateToken(scopes: Array<string>, expire: number = 86400 * 365): Promise<string> {
+    async generateToken(scopes: Array<string>, expire: number = 365): Promise<string> {
         const prefix = this.environment === 'test'? 'test.' : '';
         let requestScopes: Array<string> = [];
 
@@ -116,7 +116,8 @@ class OpenApi {
         });
 
         try {
-            const res: any = await axios.post(this.getOauthUrl() + '/token', JSON.stringify({ scopes: requestScopes, expire }), {
+            const body = { scopes: requestScopes, expire: expire * 86400 };
+            const res: any = await axios.post(this.getOauthUrl() + '/token', JSON.stringify(body), {
                 auth: { username: this.username, password: this.apiKey }
             });
             
