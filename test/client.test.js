@@ -4,7 +4,7 @@ let OpenApi = require('../dist/index').default;
 const scopes = [
     "GET:ws.ufficiopostale.com/raccomandate",
     "GET:imprese.altravia.com/autocomplete",
-    "GET:imprese.altravia.com/base",
+    "GET:test.imprese.altravia.com/base",
     "GET:imprese.altravia.com/advance",
     "GET:imprese.altravia.com/pec",
     "GET:imprese.altravia.com/autocomplete",

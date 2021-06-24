@@ -103,15 +103,16 @@ class OpenApi {
      * @param expire il timestap di scadenza del token, default: un anno
      */
     async generateToken(scopes: Array<string>, expire: number = 86400 * 365): Promise<string> {
-        if (!this.username || !this.apiKey) throw 'username and apiKey needed';
         const prefix = this.environment === 'test'? 'test.' : '';
         let requestScopes: Array<string> = [];
 
         scopes.forEach(scope => {
             const url = scope.split(':', 2)[1].split('/', 2);
+            const domain = url[0].replace(/^test.|dev./, '');
+            const mode = scope.split(':', 1);
             //@ts-ignore
-            this.scopes.push({ mode: scope.split(':', 1), domain: url[0], method: url[1] });
-            requestScopes.push(`${scope.split(':', 1)}:${prefix}${url[0]}/${url[1]}`)
+            this.scopes.push({ mode, domain, method: url[1] });
+            requestScopes.push(`${mode}:${prefix}${domain}/${url[1]}`)
         });
 
         try {
