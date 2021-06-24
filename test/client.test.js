@@ -61,6 +61,24 @@ const scopes = [
 //     expect(client.comuni).toBeDefined()
 // })
 
+test('initWithSkip', async function() {
+    
+    let client = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+    
+    const token = process.env.TOKEN;
+    expect(typeof token === 'string').toBe(true);
+
+    await client.createClient(token, true);
+    expect(client.comuni).toBeDefined()
+    expect(client.imprese).toBeDefined()
+
+    const pec = await client.imprese.getPec('12485671007')
+    expect(pec).toBeDefined();
+
+    const codice = await client.comuni.getCitiesByCap('00121')
+    expect(codice[0].regione).toBeDefined();
+})
+
 // test('testComuni', async function() {
     
 //     let client = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
@@ -82,21 +100,21 @@ const scopes = [
 //     expect(istat).toBeDefined();
 // })
 
-test('testImprese', async function() {
+// test('testImprese', async function() {
     
-    let client = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+//     let client = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
     
-    const token = process.env.TOKEN;
-    expect(typeof token === 'string').toBe(true);
+//     const token = process.env.TOKEN;
+//     expect(typeof token === 'string').toBe(true);
 
-    await client.createClient(token);
-    // const piva = await client.imprese.getByPartitaIva('12485671007')
-    // expect(piva).toBeDefined();
-    // console.log(piva);
+//     await client.createClient(token);
+//     // const piva = await client.imprese.getByPartitaIva('12485671007')
+//     // expect(piva).toBeDefined();
+//     // console.log(piva);
     
-    // const pivaAvd = await client.imprese.getAdvancedByPartitaIva('12485671007')
-    // expect(pivaAvd).toBeDefined();
-    const pec = await client.imprese.getPec('12485671007')
-    expect(pec).toBeDefined();
-    console.log(pec);
-})
+//     // const pivaAvd = await client.imprese.getAdvancedByPartitaIva('12485671007')
+//     // expect(pivaAvd).toBeDefined();
+//     const pec = await client.imprese.getPec('12485671007')
+//     expect(pec).toBeDefined();
+//     console.log(pec);
+// })

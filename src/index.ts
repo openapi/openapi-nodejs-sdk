@@ -42,37 +42,43 @@ class OpenApi {
      * Crea il client di connessione con OpenApi
      * Se l'autoRenew è attivo, controllerá lo stato del token
      * prima di istanziare il client, ed in caso lo rinnoverà
+     * 
+     * @param skipCheck consente di saltare i check iniziali e l'autoRenew,
+     * eliminando una richiesta di rete aggiuntiva, utile se si vogliono ridurre i tempi di risposta,
+     * ma istanziera tutti i client a scapito della memoria
      */
     async createClient(token: string, skipCheck = false) {
         this.token = token;
         
-        try {
-            const tokenData = await axios.get(this.getOauthUrl() + '/token/' + token, { 
-                auth: { username: this.username, password: this.apiKey }
-            });
-
-            
-            if (tokenData.status === 200 ) {
-                if (!this.scopes.length) {
-                    const scopes: Array<any> = tokenData.data.data[0].scopes;
-                    scopes.forEach(scope => {
-                        const url = scope.split(':', 2)[1].split('/', 2);
-                        //@ts-ignore
-                        this.scopes.push({ mode: scope.split(':', 1), domain: url[0], method: url[1] });
-                    })
+        if (!skipCheck) {
+            try {
+                const tokenData = await axios.get(this.getOauthUrl() + '/token/' + token, { 
+                    auth: { username: this.username, password: this.apiKey }
+                });
+    
+                
+                if (tokenData.status === 200 ) {
+                    if (!this.scopes.length) {
+                        const scopes: Array<any> = tokenData.data.data[0].scopes;
+                        scopes.forEach(scope => {
+                            const url = scope.split(':', 2)[1].split('/', 2);
+                            //@ts-ignore
+                            this.scopes.push({ mode: scope.split(':', 1), domain: url[0], method: url[1] });
+                        })
+                    }
+    
+                    if (this.autoRenew && tokenData.data.data[0].expire < ((Math.floor(Date.now() / 1000) + (86400 * 15)))) {
+                        await this.renewToken(this.token);
+                    }
                 }
-
-                if (this.autoRenew && tokenData.data.data[0].expire < ((Math.floor(Date.now() / 1000) + (86400 * 15)))) {
-                    await this.renewToken(this.token);
+                
+    
+                else if (tokenData.status === 204) {
+                    throw 'The provided token does not exists or it was deleted'
                 }
+            } catch (err) {
+                throw err;
             }
-            
-
-            else if (tokenData.status === 204) {
-                throw 'The provided token does not exists or it was deleted'
-            }
-        } catch (err) {
-            throw err;
         }
 
         this.client = axios.create({
