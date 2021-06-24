@@ -2,10 +2,17 @@ import axios, { AxiosInstance } from "axios";
 import { Environment, Service, } from "..";
 import { getBaseUrl } from "../utils";
 
+export interface SearchImprese {
+    deniminazione?: string;
+    provincia?: string;
+    piva?: string;
+    cf?: string;
+}
+
 export class Imprese implements Service {
     client: AxiosInstance;
     readonly service = 'imprese';
-    baseUrl = 'imprese.altravia.com';
+    readonly baseUrl = 'imprese.altravia.com';
     environment: Environment;
 
     constructor(client: AxiosInstance, environment: Environment) {
@@ -23,11 +30,7 @@ export class Imprese implements Service {
 
     async isClosed(partitaIva: string): Promise<boolean | any> {
         const res = (await this.client.get(this.url + '/closed/' + partitaIva)).data.data
-        if (res.cessata) {
-            return res.cessata;
-        }
-
-        return res;
+        return res.cessata ? res.cessata : res;
     }
 
     async gruppoIva(partitaIva: string) {
@@ -37,11 +40,14 @@ export class Imprese implements Service {
 
     async getPec(partitaIva: string) {
         const res = (await this.client.get(this.url + '/pec/' + partitaIva)).data.data
-        if (res.pec) {
-            return res.pec;
-        }
+        return res.pec ? res.pec : res;
+    }
 
-        return res;
+    /**
+     * Richiede accesso ad /advance
+     */
+    async search(searchQuery: SearchImprese): Promise<Array<any>> {
+        return await (await this.client.get(this.url + '/advance', { params: searchQuery })).data.data;
     }
 
     get url() {
