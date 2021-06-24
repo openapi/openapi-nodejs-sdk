@@ -5,7 +5,7 @@ import { isServiceInScopes } from "./utils";
 
 export type Environment = 'test'| 'production';
 
-type ValidHttpMethod = 'GET' |'POST' | 'UPDATE' | 'PATCH' | 'DELETE';
+type ValidHttpMethod = 'GET' |'POST' | 'UPDATE' | 'PATCH' | 'DELETE' | '*';
 export interface ScopeObject {
     domain: string;
     method: string;
@@ -14,8 +14,8 @@ export interface ScopeObject {
 
 export interface Service {
     client: AxiosInstance;
-    service: string;
-    baseUrl: string;
+    readonly service: string;
+    readonly baseUrl: string;
     environment: Environment;
 }
 
