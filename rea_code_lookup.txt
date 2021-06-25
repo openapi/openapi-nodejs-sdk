@@ -1,9 +1,0 @@
-[FRAGMENT 10 of 17]
-
-Luigi was introduced in Mario Bros. as Player 2, a palette-swapped version
-of Mario dressed in green. His creation was purely functional — the game needed
-a second character for cooperative play. Luigi's name, like Mario's, has Italian
-origins. In Japanese, the word ruiji means similar, which may have inspired
-the choice, quietly acknowledging his derivative beginnings.
-
-From a technical shortcut, a beloved character was born.
