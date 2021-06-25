@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { Comuni } from "./Services/Comuni";
+import { Geocoding } from "./Services/Geocoding";
 import { Imprese } from "./Services/Imprese";
 import { isServiceInScopes } from "./utils";
 
@@ -30,6 +31,7 @@ class OpenApi {
 
     comuni?: Comuni;
     imprese?: Imprese;
+    geocoding?: Geocoding;
 
     constructor(environment: Environment, username: string, apiKey: string, autoRenew = true) {
         this.username = username;
