@@ -42,43 +42,33 @@ class OpenApi {
      * Crea il client di connessione con OpenApi
      * Se l'autoRenew è attivo, controllerá lo stato del token
      * prima di istanziare il client, ed in caso lo rinnoverà
-     * 
-     * @param skipCheck consente di saltare i check iniziali e l'autoRenew,
-     * eliminando una richiesta di rete aggiuntiva, utile se si vogliono ridurre i tempi di risposta,
-     * ma istanziera tutti i client a scapito della memoria
      */
     async createClient(token: string, autoRenew = true) {
         this.token = token;
         
-        if (autoRenew) {
-            try {
-                const tokenData = await axios.get(this.getOauthUrl() + '/token/' + token, { 
-                    auth: { username: this.username, password: this.apiKey }
-                });
-    
-                
-                if (tokenData.status === 200 ) {
-                    if (!this.scopes.length) {
-                        const scopes: Array<any> = tokenData.data.data[0].scopes;
-                        scopes.forEach(scope => {
-                            const url = scope.split(':', 2)[1].split('/', 2);
-                            //@ts-ignore
-                            this.scopes.push({ mode: scope.split(':', 1), domain: url[0], method: url[1] });
-                        })
-                    }
-    
-                    if (autoRenew && tokenData.data.data[0].expire < ((Math.floor(Date.now() / 1000) + (86400 * 15)))) {
-                        await this.renewToken(this.token);
-                    }
+        try {
+            const tokenData = await axios.get(this.getOauthUrl() + '/token/' + token, { 
+                auth: { username: this.username, password: this.apiKey }
+            });
+
+            
+            if (tokenData.status === 200 ) {
+                const scopes: Array<any> = tokenData.data.data[0].scopes;
+                scopes.forEach(scope => {
+                    const url = scope.split(':', 2)[1].split('/', 2);
+                    this.scopes.push({ mode: scope.split(':', 1), domain: url[0], method: url[1] });
+                })
+
+                if (autoRenew && tokenData.data.data[0].expire < ((Math.floor(Date.now() / 1000) + (86400 * 15)))) {
+                    await this.renewToken(this.token);
                 }
-                
-    
-                else if (tokenData.status === 204) {
-                    throw 'The provided token does not exists or it was deleted'
-                }
-            } catch (err) {
-                throw err;
             }
+
+            else if (tokenData.status === 204) {
+                throw 'The provided token does not exists or it was deleted'
+            }
+        } catch (err) {
+            throw err;
         }
 
         this.client = axios.create({
@@ -107,27 +97,20 @@ class OpenApi {
      * Genera un token 
      * @param expire valore in giorni alla di scadenza del token, default: un anno
      */
-    async generateToken(scopes: Array<string>, expire: number = 365): Promise<string> {
-        const prefix = this.environment === 'test'? 'test.' : '';
-        let requestScopes: Array<string> = [];
-
+    async generateToken(scopes: Array<string>, expire: number = 365, autoRenew = true): Promise<string> {
         scopes.forEach(scope => {
             const url = scope.split(':', 2)[1].split('/', 2);
-            const domain = url[0].replace(/^test.|dev./, '');
-            const mode = scope.split(':', 1);
             //@ts-ignore
-            this.scopes.push({ mode, domain, method: url[1] });
-            requestScopes.push(`${mode}:${prefix}${domain}/${url[1]}`)
+            this.scopes.push({ mode: scope.split(':', 1), domain: url[0].replace(/^test.|dev./, ''), method: url[1] });
         });
 
         try {
-            const body = { scopes: requestScopes, expire: expire * 86400 };
+            const body = { scopes: this.scopes.map(s => `${s.mode}:${this.prefix}${s.domain}/${s.method}`), expire: expire * 86400 };
             const res: any = await axios.post(this.getOauthUrl() + '/token', JSON.stringify(body), {
                 auth: { username: this.username, password: this.apiKey }
             });
-            
 
-            if (!res?.data?.success) throw 'Server responded with a status error';
+            await this.createClient(res.data.token, autoRenew);
             return res.data.token;
 
         } catch(err) {
@@ -136,7 +119,11 @@ class OpenApi {
     }
 
     getOauthUrl() {
-        return 'https://'+( this.environment === 'test' ? 'test.': '') +'oauth.altravia.com';
+        return 'https://'+ this.prefix +'oauth.altravia.com';
+    }
+
+    get prefix() {
+        return this.environment === 'test' ? 'test.': '';
     }
 }
 
