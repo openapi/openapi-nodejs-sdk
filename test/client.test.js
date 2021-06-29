@@ -101,13 +101,12 @@ const scopes = [
 // })
 
 test('testImprese', async function() {
+    let openapi = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+    await openapi.createClient(token, true);
     
-    let client = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
-    
-    const token = await client.generateToken(scopes);
-    expect(typeof token === 'string').toBe(true);
+    // const token = await client.generateToken(scopes);
+    // expect(typeof token === 'string').toBe(true);
 
-    await client.createClient(token);
     // const piva = await client.imprese.getByPartitaIva('12485671007')
     // expect(piva).toBeDefined();
     // console.log(piva);
@@ -119,6 +118,7 @@ test('testImprese', async function() {
     // console.log(pec);
 
     const imprese = await client.imprese.search({ provincia: 'RM' })
-    expect(imprese).toBeDefined();
-    console.log(imprese);
+    
+    // expect(imprese).toBeDefined();
+    // console.log(imprese);
 })

@@ -26,18 +26,16 @@ class OpenApi {
     token?: string;
     username: string;
     apiKey: string;
-    autoRenew: boolean;
     scopes: Array<ScopeObject> = [];
 
     comuni?: Comuni;
     imprese?: Imprese;
     geocoding?: Geocoding;
 
-    constructor(environment: Environment, username: string, apiKey: string, autoRenew = true) {
+    constructor(environment: Environment, username: string, apiKey: string) {
         this.username = username;
         this.apiKey = apiKey;
         this.environment = environment;
-        this.autoRenew = autoRenew;
     }
     
     /**
@@ -49,10 +47,10 @@ class OpenApi {
      * eliminando una richiesta di rete aggiuntiva, utile se si vogliono ridurre i tempi di risposta,
      * ma istanziera tutti i client a scapito della memoria
      */
-    async createClient(token: string, skipCheck = false) {
+    async createClient(token: string, autoRenew = true) {
         this.token = token;
         
-        if (!skipCheck) {
+        if (autoRenew) {
             try {
                 const tokenData = await axios.get(this.getOauthUrl() + '/token/' + token, { 
                     auth: { username: this.username, password: this.apiKey }
@@ -69,7 +67,7 @@ class OpenApi {
                         })
                     }
     
-                    if (this.autoRenew && tokenData.data.data[0].expire < ((Math.floor(Date.now() / 1000) + (86400 * 15)))) {
+                    if (autoRenew && tokenData.data.data[0].expire < ((Math.floor(Date.now() / 1000) + (86400 * 15)))) {
                         await this.renewToken(this.token);
                     }
                 }
@@ -90,7 +88,7 @@ class OpenApi {
         [Comuni, Imprese].forEach(service => {
             //@ts-ignore
             const s = new service(this.client, this.environment);
-            if (skipCheck || isServiceInScopes(this.scopes, s.baseUrl)) {
+            if (!autoRenew || isServiceInScopes(this.scopes, s.baseUrl)) {
                 //@ts-ignore
                 this[s.service] = s;
             }
