@@ -76,12 +76,9 @@ export class FirmaDigitale implements Service {
      * 
      * @param codProdotto il codice del prodotto da richiedere: https://developers.openapi.it/services/firmadigitale
      * @param data dati aggiuntivi richiesti dallo specifico prodotto richiesto
-     * @param anagrafica se il prodotto richiede un'anagrafica, questa verrà aggita alla richiesta, Questo parametro è tipografato e fornisce un aiuto in fase di compilazione. In alternativa, è possibile passare `{ anagrafica }` direttamente in `data`, passando questo parametro nullo
-     * @returns 
      */
-    async requestProduct(codProdotto: string, data: any, anagrafica?: Anagrafica, assistenza?: boolean, callback?: Callback) {
+    async requestProduct(codProdotto: string, data: any, assistenza?: boolean, callback?: Callback) {
         const body = { ...data };
-        if (anagrafica) body.anagrafica = anagrafica;
         if (assistenza) body.assistenza = assistenza;
         if (callback) body.callback = callback;
 

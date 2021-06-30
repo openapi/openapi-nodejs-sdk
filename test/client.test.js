@@ -113,9 +113,21 @@ const scopes = [
 //     console.log(imprese);
 // })
 
-test('testPa', async function() {
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
-    client.generateToken(scopes)
-    const piva = await client.pa.findPa('00559720982')
-    expect(piva).toBeDefined();
-})
+// test('testPa', async function() {
+//     let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+//     client.generateToken(scopes)
+//     const piva = await client.pa.findPa('00559720982')
+//     expect(piva).toBeDefined();
+// })
+// test('testFD', async function() {
+//     let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+//     const prodotti = await client.firmaDigitale.getProducts();
+//     expect(prodotti).toBeDefined();
+
+//     const richiesta  = await client.firmaDigitale.requestProduct('RINFIR', {})
+//     expect(richiesta.id).toBeDefined()
+
+//     const infoRichiesta = await client.firmaDigitale.getRequest(richiesta.id)
+//     expect(infoRichiesta).toBeDefined()
+//     console.log(infoRichiesta);
+// })
