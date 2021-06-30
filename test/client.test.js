@@ -4,7 +4,7 @@ let OpenApi = require('../dist/index').default;
 const scopes = [
     "GET:ws.ufficiopostale.com/raccomandate",
     "GET:imprese.altravia.com/autocomplete",
-    "GET:test.imprese.altravia.com/base",
+    // "GET:test.imprese.altravia.com/base",
     // "GET:imprese.altravia.com/advance",
     // "GET:imprese.altravia.com/pec",
     // "GET:imprese.altravia.com/autocomplete",
@@ -28,27 +28,20 @@ const scopes = [
     "POST:ws.marchetemporali.com/marca",
     "POST:ws.marchetemporali.com/verifica",
     "POST:ws.marchetemporali.com/analisi",
+    'imprese.altravia.com'
 ];
 
-// test('init', async function() {
+test('init', async function() {
     
-//     let client = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
-    
-//     const token = await client.generateToken(scopes);
+    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+    const token = await client.generateToken(scopes);
+    expect(typeof token === 'string').toBeTruthy()
+})
 
-//     await client.createClient(token);
-// })
-
-// test('initWithToken', async function() {
-    
-//     let client = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
-    
-//     const token = process.env.TOKEN;
-//     expect(typeof token === 'string').toBe(true);
-
-//     await client.createClient(token);
-//     expect(client.comuni).toBeDefined();
-// })
+test('initWithToken', async function() {
+    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+    expect(client.comuni).toBeDefined();
+})
 
 // test('initWithOldToken', async function() {
     
@@ -100,25 +93,25 @@ const scopes = [
 //     expect(istat).toBeDefined();
 // })
 
-test('testImprese', async function() {
-    let openapi = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
-    await openapi.createClient(token, true);
+// test('testImprese', async function() {
+//     let openapi = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+//     await openapi.createClient(token, true);
     
-    // const token = await client.generateToken(scopes);
-    // expect(typeof token === 'string').toBe(true);
+//     // const token = await client.generateToken(scopes);
+//     // expect(typeof token === 'string').toBe(true);
 
-    // const piva = await client.imprese.getByPartitaIva('12485671007')
-    // expect(piva).toBeDefined();
-    // console.log(piva);
+//     // const piva = await client.imprese.getByPartitaIva('12485671007')
+//     // expect(piva).toBeDefined();
+//     // console.log(piva);
     
-    // const pivaAvd = await client.imprese.getAdvancedByPartitaIva('12485671007')
-    // expect(pivaAvd).toBeDefined();
-    // const pec = await client.imprese.getPec('12485671007')
-    // expect(pec).toBeDefined();
-    // console.log(pec);
+//     // const pivaAvd = await client.imprese.getAdvancedByPartitaIva('12485671007')
+//     // expect(pivaAvd).toBeDefined();
+//     // const pec = await client.imprese.getPec('12485671007')
+//     // expect(pec).toBeDefined();
+//     // console.log(pec);
 
-    const imprese = await client.imprese.search({ provincia: 'RM' })
+//     const imprese = await client.imprese.search({ provincia: 'RM' })
     
-    // expect(imprese).toBeDefined();
-    // console.log(imprese);
-})
+//     // expect(imprese).toBeDefined();
+//     // console.log(imprese);
+// })

@@ -55,7 +55,7 @@ class OpenApi {
             if (tokenData.status === 200 ) {
                 const scopes: Array<any> = tokenData.data.data[0].scopes;
                 scopes.forEach(scope => {
-                    const url = scope.split(':', 2)[1].split('/', 2);
+                    const url = OpenApi.splitScope(scope);
                     this.scopes.push({ mode: scope.split(':', 1), domain: url[0], method: url[1] });
                 })
 
@@ -99,7 +99,12 @@ class OpenApi {
      */
     async generateToken(scopes: Array<string>, expire: number = 365, autoRenew = true): Promise<string> {
         scopes.forEach(scope => {
-            const url = scope.split(':', 2)[1].split('/', 2);
+            if (!scope.match(/:/)) {
+                scope = scope.replace('/', '');
+                scope = '*:' + scope + '/';
+            }
+
+            const url = OpenApi.splitScope(scope);
             //@ts-ignore
             this.scopes.push({ mode: scope.split(':', 1), domain: url[0].replace(/^test.|dev./, ''), method: url[1] });
         });
@@ -124,6 +129,20 @@ class OpenApi {
 
     get prefix() {
         return this.environment === 'test' ? 'test.': '';
+    }
+
+    static splitScope(scope: string) {
+        return scope.split(':', 2)[1].split('/', 2);
+    }
+
+    static async init(environment: Environment, username: string, apiKey: string, token?: string, autoRenew = true) {
+        const openapi = new OpenApi('test', username, apiKey);
+        
+        if (token) {
+            await openapi.createClient(token, autoRenew);
+        }
+
+        return openapi;
     }
 }
 
