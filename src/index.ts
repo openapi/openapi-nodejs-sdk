@@ -85,6 +85,9 @@ class OpenApi {
             if (!autoRenew || isServiceInScopes(this.scopes, s.baseUrl)) {
                 //@ts-ignore
                 this[s.service] = s;
+            } else {
+                //@ts-ignore
+                this[s.service] = this.missingScope();
             }
         });
         
@@ -127,6 +130,10 @@ class OpenApi {
 
     getOauthUrl() {
         return 'https://'+ this.prefix +'oauth.altravia.com';
+    }
+
+    get missingScope() {
+        throw 'Missing scopes for this WS';
     }
 
     get prefix() {
