@@ -131,3 +131,9 @@ const scopes = [
 //     expect(infoRichiesta).toBeDefined()
 //     console.log(infoRichiesta);
 // })
+
+test('testMT', async function() {
+    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+    const lotto = await client.marcheTemporali.checkLotto('FAKETSA.altravia16', 'FAKE9R155S9VF');
+    expect(lotto.used).toBeDefined()
+})

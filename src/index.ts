@@ -5,6 +5,7 @@ import { Imprese } from "./Services/Imprese";
 import { isServiceInScopes } from "./utils";
 import { Pa } from './Services/Pa';
 import { FirmaDigitale } from "./Services/FirmaDigitale";
+import { MarcheTemporali } from "./Services/MarcheTemporali";
 
 export type Environment = 'test'| 'production';
 
@@ -35,6 +36,7 @@ class OpenApi {
     geocoding?: Geocoding;
     pa?: Pa;
     firmaDigitale?: FirmaDigitale;
+    marcheTemporali?: MarcheTemporali;
 
     constructor(environment: Environment, username: string, apiKey: string) {
         this.username = username;
@@ -79,7 +81,7 @@ class OpenApi {
             headers: { 'Authorization': 'Bearer ' + this.token }
         });
 
-        [Comuni, Imprese, Geocoding, Pa, FirmaDigitale].forEach(service => {
+        [Comuni, Imprese, Geocoding, Pa, FirmaDigitale, MarcheTemporali].forEach(service => {
             //@ts-ignore
             const s = new service(this.client, this.environment);
             if (!autoRenew || isServiceInScopes(this.scopes, s.baseUrl)) {
