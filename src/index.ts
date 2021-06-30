@@ -77,7 +77,7 @@ class OpenApi {
             headers: { 'Authorization': 'Bearer ' + this.token }
         });
 
-        [Comuni, Imprese].forEach(service => {
+        [Comuni, Imprese, Geocoding, Pa].forEach(service => {
             //@ts-ignore
             const s = new service(this.client, this.environment);
             if (!autoRenew || isServiceInScopes(this.scopes, s.baseUrl)) {
@@ -100,19 +100,17 @@ class OpenApi {
      * @param expire valore in giorni alla di scadenza del token, default: un anno
      */
     async generateToken(scopes: Array<string>, expire: number = 365, autoRenew = true): Promise<string> {
-        scopes.forEach(scope => {
+        scopes = scopes.map(scope => {
             if (!scope.match(/:/)) {
-                scope = scope.replace('/', '');
-                scope = '*:' + scope + '/';
+                scope = '*:' + scope.replace('/', '') + '/*';
             }
-
+            
             const url = OpenApi.splitScope(scope);
-            //@ts-ignore
-            this.scopes.push({ mode: scope.split(':', 1), domain: url[0].replace(/^test.|dev./, ''), method: url[1] });
+            return `${scope.split(':', 1)}:${this.prefix}${url[0].replace(/^test.|dev./, '')}/${url[1]}`
         });
 
         try {
-            const body = { scopes: this.scopes.map(s => `${s.mode}:${this.prefix}${s.domain}/${s.method}`), expire: expire * 86400 };
+            const body = { scopes, expire: expire * 86400 };
             const res: any = await axios.post(this.getOauthUrl() + '/token', JSON.stringify(body), {
                 auth: { username: this.username, password: this.apiKey }
             });

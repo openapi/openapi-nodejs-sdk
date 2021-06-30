@@ -28,20 +28,21 @@ const scopes = [
     "POST:ws.marchetemporali.com/marca",
     "POST:ws.marchetemporali.com/verifica",
     "POST:ws.marchetemporali.com/analisi",
-    'imprese.altravia.com'
+    'imprese.altravia.com',
+    'pa.openapi.it',
 ];
 
-test('init', async function() {
+// test('init', async function() {
     
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
-    const token = await client.generateToken(scopes);
-    expect(typeof token === 'string').toBeTruthy()
-})
+//     let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+//     const token = await client.generateToken(scopes);
+//     expect(typeof token === 'string').toBeTruthy()
+// })
 
-test('initWithToken', async function() {
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
-    expect(client.comuni).toBeDefined();
-})
+// test('initWithToken', async function() {
+//     let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+//     expect(client.comuni).toBeDefined();
+// })
 
 // test('initWithOldToken', async function() {
     
@@ -94,24 +95,26 @@ test('initWithToken', async function() {
 // })
 
 // test('testImprese', async function() {
-//     let openapi = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
-//     await openapi.createClient(token, true);
+//     let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
     
-//     // const token = await client.generateToken(scopes);
-//     // expect(typeof token === 'string').toBe(true);
-
-//     // const piva = await client.imprese.getByPartitaIva('12485671007')
-//     // expect(piva).toBeDefined();
-//     // console.log(piva);
+//     const piva = await client.imprese.getByPartitaIva('12485671007')
+//     expect(piva).toBeDefined();
+//     console.log(piva);
     
-//     // const pivaAvd = await client.imprese.getAdvancedByPartitaIva('12485671007')
-//     // expect(pivaAvd).toBeDefined();
-//     // const pec = await client.imprese.getPec('12485671007')
-//     // expect(pec).toBeDefined();
-//     // console.log(pec);
+//     const pivaAvd = await client.imprese.getAdvancedByPartitaIva('12485671007')
+//     expect(pivaAvd).toBeDefined();
+//     const pec = await client.imprese.getPec('12485671007')
+//     expect(pec).toBeDefined();
+//     console.log(pec);
 
 //     const imprese = await client.imprese.search({ provincia: 'RM' })
     
-//     // expect(imprese).toBeDefined();
-//     // console.log(imprese);
+//     expect(imprese).toBeDefined();
+//     console.log(imprese);
 // })
+
+test('testPa', async function() {
+    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+    const piva = await client.pa.findPa('00559720982')
+    expect(piva).toBeDefined();
+})
