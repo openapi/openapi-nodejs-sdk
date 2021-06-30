@@ -113,8 +113,9 @@ const scopes = [
 //     console.log(imprese);
 // })
 
-test('testPa', async function() {
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
-    const piva = await client.pa.findPa('00559720982')
-    expect(piva).toBeDefined();
-})
+// test('testPa', async function() {
+//     let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+//     const piva = await client.pa.findPa('00559720982')
+//     expect(piva).toBeDefined();
+// })
+

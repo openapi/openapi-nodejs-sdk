@@ -17,7 +17,7 @@ export interface SmsRecipient {
     fields: any;
 }
 
-export class Imprese implements Service {
+export class Sms implements Service {
     client: AxiosInstance;
     readonly service = 'messages';
     readonly baseUrl = 'ws.messaggisms.com';
