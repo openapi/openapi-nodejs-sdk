@@ -3,6 +3,7 @@ import { Comuni } from "./Services/Comuni";
 import { Geocoding } from "./Services/Geocoding";
 import { Imprese } from "./Services/Imprese";
 import { isServiceInScopes } from "./utils";
+import { Pa } from './Services/Pa';
 
 export type Environment = 'test'| 'production';
 
@@ -31,6 +32,7 @@ class OpenApi {
     comuni?: Comuni;
     imprese?: Imprese;
     geocoding?: Geocoding;
+    pa?: Pa;
 
     constructor(environment: Environment, username: string, apiKey: string) {
         this.username = username;

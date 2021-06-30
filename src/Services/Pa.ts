@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from "axios";
 import { Environment, Service, } from "..";
 import { getBaseUrl } from "../utils";
 
-export class Geocoding implements Service {
+export class Pa implements Service {
     client: AxiosInstance;
     readonly service = 'pa';
     readonly baseUrl = 'pa.openapi.it';
