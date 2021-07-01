@@ -132,8 +132,21 @@ const scopes = [
 //     console.log(infoRichiesta);
 // })
 
-test('testMT', async function() {
+// test('testMT', async function() {
+//     let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+//     const lotto = await client.marcheTemporali.checkLotto('FAKETSA.altravia16', 'FAKE9R155S9VF');
+//     expect(lotto.used).toBeDefined()
+// })
+
+test('testValutometro', async function() {
     let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
-    const lotto = await client.marcheTemporali.checkLotto('FAKETSA.altravia16', 'FAKE9R155S9VF');
-    expect(lotto.used).toBeDefined()
+    const p = await client.valutometro.listPropertyTypes()
+    expect(p[0]).toBeDefined()
+    
+    const c = await client.valutometro.listContractTypes()
+    expect(c[0]).toBeDefined()
+
+    const q = await client.valutometro.quote('via del rivo 10 Terni', '20', 'sale')
+    expect(q).toBeDefined()
+    console.log(q);
 })

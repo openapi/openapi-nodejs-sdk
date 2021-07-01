@@ -58,7 +58,7 @@ export class Valutometro implements Service {
     } 
 
     async immobili(id?: string) {
-        return await (await this.client.get(this.url + '/immobili' + id ? `/${id}` : '')).data.data;
+        return await (await this.client.get(this.url + '/immobili' + (id ? `/${id}` : ''))).data.data;
     }
 
     async listPropertyTypes(): Promise<Array<Value>> {
@@ -70,7 +70,7 @@ export class Valutometro implements Service {
     }
 
     async contratti(id?: string) {
-        return await (await this.client.get(this.url + '/contratti' + id ? `/${id}` : '')).data.data;
+        return await (await this.client.get(this.url + '/contratti' + (id ? `/${id}` : ''))).data.data;
     }
 
     async listContractTypes(): Promise<Array<Value>> {
