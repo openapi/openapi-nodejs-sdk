@@ -12,7 +12,7 @@ export interface Marca {
   timestamp_acquisto?: string;
 }
 
-interface newMarca {
+export interface newMarca {
   id_marca: string;
   username: string;
   password: string;
