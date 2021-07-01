@@ -2,6 +2,15 @@ import { AxiosInstance } from "axios";
 import { Environment, Service, } from "..";
 import { getBaseUrl } from "../utils";
 
+export interface Company {
+  valid?: boolean;
+  format_valid?: boolean;
+  country_code?: string;
+  vat_number?: string;
+  company_name?: string;
+  company_address?: string;
+}
+
 export class EuropeanVat implements Service {
     client: AxiosInstance;
     readonly service = 'europeanvat';
@@ -13,7 +22,7 @@ export class EuropeanVat implements Service {
         this.environment = environment;
     }
 
-    async getInformation(country: string, vat?: string) {
+    async getInformation(country: string, vat?: string): Promise<Company> {
         return await (await this.client.get(this.url + '/companies/' + country + '/' + vat)).data.data;
     }
 
