@@ -9,6 +9,7 @@ import { MarcheTemporali } from "./Services/MarcheTemporali";
 import { PecMassiva } from "./Services/PecMassiva";
 import { Valutometro } from "./Services/Valutometro";
 import { Splitpayment } from "./Services/SplitPayment";
+import { EuropeanVat } from "./Services/EuropeanVat";
 
 export type Environment = 'test'| 'production';
 
@@ -43,6 +44,7 @@ class OpenApi {
     pecMassiva?: PecMassiva;
     valutometro?: Valutometro;
     splitpayment?: Splitpayment;
+    europeanVat?: EuropeanVat;
 
     constructor(environment: Environment, username: string, apiKey: string) {
         this.username = username;
@@ -87,7 +89,7 @@ class OpenApi {
             headers: { 'Authorization': 'Bearer ' + this.token }
         });
 
-        [Comuni, Imprese, Geocoding, Pa, FirmaDigitale, MarcheTemporali, PecMassiva, Valutometro, Splitpayment]
+        [Comuni, Imprese, Geocoding, Pa, FirmaDigitale, MarcheTemporali, PecMassiva, Valutometro, Splitpayment, EuropeanVat]
             .forEach(service => {
             //@ts-ignore
             const s = new service(this.client, this.environment);
