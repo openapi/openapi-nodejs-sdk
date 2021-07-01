@@ -138,15 +138,15 @@ const scopes = [
 //     expect(lotto.used).toBeDefined()
 // })
 
-test('testValutometro', async function() {
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
-    const p = await client.valutometro.listPropertyTypes()
-    expect(p[0]).toBeDefined()
+// test('testValutometro', async function() {
+//     let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+//     const p = await client.valutometro.listPropertyTypes()
+//     expect(p[0]).toBeDefined()
     
-    const c = await client.valutometro.listContractTypes()
-    expect(c[0]).toBeDefined()
+//     const c = await client.valutometro.listContractTypes()
+//     expect(c[0]).toBeDefined()
 
-    const q = await client.valutometro.quote('via del rivo 10 Terni', '20', 'sale')
-    expect(q).toBeDefined()
-    console.log(q);
-})
+//     const q = await client.valutometro.quote('via del rivo 10 Terni', '20', 'sale')
+//     expect(q).toBeDefined()
+//     console.log(q);
+// })
