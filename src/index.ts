@@ -13,7 +13,7 @@ import { EuropeanVat } from "./Services/EuropeanVat";
 
 export type Environment = 'test'| 'production';
 
-type ValidHttpMethod = 'GET' |'POST' | 'UPDATE' | 'PATCH' | 'DELETE' | '*';
+export type ValidHttpMethod = 'GET' |'POST' | 'UPDATE' | 'PATCH' | 'DELETE' | '*';
 export interface ScopeObject {
     domain: string;
     method: string;

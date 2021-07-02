@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { Environment, Service, } from '../index';
+import { Callback } from '../types';
 import { getBaseUrl } from "../utils";
 
 export interface Prodotto {
@@ -7,13 +8,6 @@ export interface Prodotto {
     tipo?: string;
     codice_prodotto?: string;
     prezzo?: number;
-}
-
-export interface Callback {
-  url?: string;
-  method?: string;
-  field?: string;
-  data?: any
 }
 
 export interface Anagrafica {
