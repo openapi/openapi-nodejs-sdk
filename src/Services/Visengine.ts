@@ -76,8 +76,13 @@ export class Visengine implements Service {
         return await (await this.client.get(this.url + '/visure')).data.data;
     }
 
-    async serviceDescription(hash: string): Promise<Visura> {
-        return await (await this.client.get(this.url + '/visure/' + hash)).data.data;
+    async getServiceDescription(hash: string): Promise<Visura> {
+        const res = await (await this.client.get(this.url + '/visure/' + hash)).data.data;
+        if (res.json_struttura.istruzioni) {
+            res.json_struttura.istruzioni = Buffer.from(res.json_struttura.istruzioni, 'base64').toString();
+        }
+        
+        return res;
     }
 
     async listRequests(): Promise<Richiesta[]> {
@@ -109,6 +114,9 @@ export class Visengine implements Service {
         for (const [key, value] of Object.entries(updatedFields)) {
             newFields[`json_visura.${key}`] = value;
         }
+
+        console.log(newFields); return
+        
 
         let body: {[key:string]: any} = { state: this.getTransactionStatus(transaction), ...newFields };
         return await (await this.client.put(this.url + '/richiesta/' + id, JSON.stringify(body))).data.data;
