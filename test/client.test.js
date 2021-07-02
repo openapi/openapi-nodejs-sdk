@@ -71,27 +71,27 @@ const scopes = [
 //     expect(codice[0].regione).toBeDefined();
 // })
 
-test('testComuni', async function() {
-    const token = process.env.TOKEN;
-    expect(typeof token === 'string').toBe(true);
+// test('testComuni', async function() {
+//     const token = process.env.TOKEN;
+//     expect(typeof token === 'string').toBe(true);
     
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, token);
+//     let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, token);
     
 
-    const cap = await client.comuni.getCitiesByCap('00121')
-    expect(cap[0].regione).toBe('Lazio');
+//     const cap = await client.comuni.getCitiesByCap('00121')
+//     expect(cap[0].regione).toBe('Lazio');
     
-    const province = await client.comuni.listProvince();
-    expect(province.MI).toBeDefined();
+//     const province = await client.comuni.listProvince();
+//     expect(province.MI).toBeDefined();
 
-    const comuni = await client.comuni.listComuni('MI');
-    expect(comuni[0]).toBeDefined();
+//     const comuni = await client.comuni.listComuni('MI');
+//     expect(comuni[0]).toBeDefined();
     
-    const istat = await client.comuni.getFromIstatCode('055032');
-    expect(istat).toBeDefined();
+//     const istat = await client.comuni.getFromIstatCode('055032');
+//     expect(istat).toBeDefined();
 
-    console.log(cap, province, comuni);
-})
+//     console.log(cap, province, comuni);
+// })
 
 // test('testImprese', async function() {
 //     let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
