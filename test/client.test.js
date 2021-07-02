@@ -51,7 +51,6 @@ const scopes = [
 //     const token = process.env.OLD_TOKEN;
 //     expect(typeof token === 'string').toBe(true);
 
-//     await client.createClient(token);
 //     expect(client.comuni).toBeDefined()
 // })
 
@@ -62,7 +61,6 @@ const scopes = [
 //     const token = process.env.TOKEN;
 //     expect(typeof token === 'string').toBe(true);
 
-//     await client.createClient(token, true);
 //     expect(client.comuni).toBeDefined()
 //     expect(client.imprese).toBeDefined()
 
@@ -73,26 +71,27 @@ const scopes = [
 //     expect(codice[0].regione).toBeDefined();
 // })
 
-// test('testComuni', async function() {
+test('testComuni', async function() {
+    const token = process.env.TOKEN;
+    expect(typeof token === 'string').toBe(true);
     
-//     let client = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, token);
     
-//     const token = process.env.TOKEN;
-//     expect(typeof token === 'string').toBe(true);
 
-//     await client.createClient(token);
-//     const cap = await client.comuni.getCitiesByCap('00121')
-//     expect(cap[0].regione).toBeDefined();
+    const cap = await client.comuni.getCitiesByCap('00121')
+    expect(cap[0].regione).toBe('Lazio');
     
-//     const codice = await client.comuni.getCitiesByCap('00121')
-//     expect(codice[0].regione).toBeDefined();
+    const province = await client.comuni.listProvince();
+    expect(province.MI).toBeDefined();
+
+    const comuni = await client.comuni.listComuni('MI');
+    expect(comuni[0]).toBeDefined();
     
-//     const province = await client.comuni.getProvincie();
-//     expect(province).toBeDefined();
-    
-//     const istat = await client.comuni.getFromIstatCode('055032');
-//     expect(istat).toBeDefined();
-// })
+    const istat = await client.comuni.getFromIstatCode('055032');
+    expect(istat).toBeDefined();
+
+    console.log(cap, province, comuni);
+})
 
 // test('testImprese', async function() {
 //     let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
