@@ -12,6 +12,7 @@ import { Splitpayment } from "./Services/SplitPayment";
 import { EuropeanVat } from "./Services/EuropeanVat";
 import { Visengine } from "./Services/Visengine";
 import { Postontarget } from "./Services/Postontarget";
+import { Domains } from "./Services/Domanins";
 
 export type Environment = 'test'| 'production';
 
@@ -49,6 +50,7 @@ class OpenApi {
     europeanVat?: EuropeanVat;
     visengine?: Visengine;
     postontarget?: Postontarget;
+    domains?: Domains;
 
     constructor(environment: Environment, username: string, apiKey: string) {
         this.username = username;
@@ -93,8 +95,9 @@ class OpenApi {
             headers: { 'Authorization': 'Bearer ' + this.token }
         });
 
-        [Comuni, Imprese, Geocoding, Pa, FirmaDigitale, MarcheTemporali, PecMassiva, Valutometro, Splitpayment, EuropeanVat, Visengine, Postontarget]
-            .forEach(service => {
+        [Comuni, Imprese, Geocoding, Pa, FirmaDigitale, MarcheTemporali, PecMassiva, 
+            Valutometro, Splitpayment, EuropeanVat, Visengine, Postontarget, Domains
+        ].forEach(service => {
             //@ts-ignore
             const s = new service(this.client, this.environment);
             if (!autoRenew || isServiceInScopes(this.scopes, s.baseUrl)) {
