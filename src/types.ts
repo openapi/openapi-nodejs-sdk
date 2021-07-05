@@ -2,7 +2,7 @@ import { ValidHttpMethod } from ".";
 
 export interface Callback {
     url?: string;
-    method?: ValidHttpMethod;
+    method?: 'JSON' | 'POST';
     field?: string;
     data?: any
 }

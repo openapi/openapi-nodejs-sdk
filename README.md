@@ -86,3 +86,5 @@ Currently, those are the available web services:
 * domains
 
 While most of them are straight forward, some may need additional explanation. Please check out the more comprehensive documentation:
+
+[VISENGINE](/blob/master/docs/visengine.md)

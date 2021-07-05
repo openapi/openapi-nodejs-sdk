@@ -150,4 +150,21 @@ const scopes = [
 //     console.log(q);
 // })
 
+test('testVisengine', async function() {
+    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+    const s = await client.visengine.listServices()
+    expect(s[0]).toBeDefined()
+
+    const visuraDescription = await client.visengine.getServiceDescription(s[0].hash_visura)
+    console.log(JSON.stringify(visuraDescription, null, 2));
+
+    const json_visura = {'$0': 'test', '$1': 'lorem ipsum'}
+    const callback = {
+        url: 'enpoint.example.com',
+        method: 'POST',
+        field: 'data',
+    }
+    const visura = await client.visengine.createRequest(s[0].hash_visura, json_visura, {}, callback,null, 'close', true);
+    console.log(visura);
+})
 //

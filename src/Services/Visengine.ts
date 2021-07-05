@@ -93,6 +93,13 @@ export class Visengine implements Service {
         return await (await this.client.get(this.url + '/richiesta/' + id)).data.data;
     }
 
+    /**
+     * 
+     * @param options the options of a specific visura
+     * @param callback optional: a callback object to ping when the visura is ready
+     * @param transaction whether to close the request now or in the future with an optional PUT request
+     * @returns 
+     */
     async createRequest(hash: string, json_visura: any, options?: any, callback?: Callback, email_target?: string, transaction: Transaction = 'close', test = false) {
         const state = this.getTransactionStatus(transaction);
         let body: {[key:string]: any} = { hash_visura: hash, json_visura, email_target, state, test };
