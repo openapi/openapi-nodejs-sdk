@@ -43,6 +43,8 @@ const token = await client.generateToken(scopes);
 
 // The client is now ready to make requests
 ```
+### Undefined methods
+The client will instantiate **only the instances needed** based on the provided token: if you get `undefined` method when you attempt to run a request, please check if you have all the required permissions.
 
 ## Make requests
 Once the client has been initialized, we can start making requests: all the available methods will be loaded based on the provided token.
@@ -50,7 +52,7 @@ Once the client has been initialized, we can start making requests: all the avai
 As an example, let's request the list of all cities in a given CAP
 
 ```js
-    const cities = await client.comuni.getCitiesByCap('00132')
+const cities = await client.comuni.getCitiesByCap('00132')
 try {
 } catch(err) {
     // err handling logic...
