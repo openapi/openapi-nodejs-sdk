@@ -9,6 +9,10 @@
     "build": "tsc"
   },
   "homepage": "https://developers.openapi.it",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openapi-it/OpenApi-NodeJS"
+  },
   "author": "Altravia Srl",
   "license": "MIT",
   "private": false,
