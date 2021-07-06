@@ -1,5 +1,5 @@
 {
-  "name": "openapi-client",
+  "name": "@altravia/openapi",
   "version": "1.0.0",
   "description": "Official OpenApi NodeJS Client",
   "main": "dist/index.js",
