@@ -122,7 +122,11 @@ class OpenApi {
      * Genera un token 
      * @param expire valore in giorni alla di scadenza del token, default: un anno
      */
-    async generateToken(scopes: Array<string>, expire: number = 365, autoRenew = true): Promise<string> {
+    async generateToken(scopes: string | Array<string>, expire: number = 365, autoRenew = true): Promise<string> {
+        if (typeof scopes === 'string') {
+            scopes = [scopes];
+        }
+
         scopes = scopes.map(scope => {
             if (!scope.match(/:/)) {
                 scope = '*:' + scope.replace('/', '') + '/*';
