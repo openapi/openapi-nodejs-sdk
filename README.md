@@ -7,7 +7,7 @@ npm install @altravia/openapi
 ```
 
 ```js
-const OpenApi = require('openapi-client').default;
+const OpenApi = require('@altravia/openapi').default;
 ```
 
 ## Usage
