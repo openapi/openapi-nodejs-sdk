@@ -1,0 +1,5 @@
+README.md
+jest.config.json
+test/
+.vscode
+*.code-workspace

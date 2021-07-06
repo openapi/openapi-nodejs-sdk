@@ -26,6 +26,7 @@ interface Domain {
   renewal_date: string;
 }
 
+// @todo implementare contact
 export class Domains implements Service {
     client: AxiosInstance;
     readonly service = 'domains';
