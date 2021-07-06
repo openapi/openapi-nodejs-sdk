@@ -1,7 +1,11 @@
 # OpenApi NodeJS Client
 
 ## Installation
-...todo
+
+```
+npm install @altravia/openapi
+```
+
 ```js
 const OpenApi = require('openapi-client').default;
 ```
