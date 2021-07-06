@@ -71,19 +71,19 @@ const imprese = await client.imprese.search({ provincia: 'RM' })
 The library is typed, so you will get hints in supported IDEs of all the available methods.
 
 Currently, those are the available web services:
-* comuni
-* imprese
-* geocoding
-* pa
-* firmaDigitale
-* marcheTemporali
-* pecMassiva
-* valutometro
-* splitpayment
-* europeanVat
-* visengine
-* postontarget
-* domains
+* [comuni](https://developers.openapi.it/services/comuni)
+* [imprese](https://developers.openapi.it/services/imprese)
+* [geocoding](https://developers.openapi.it/services/geocoding)
+* [pa](https://developers.openapi.it/services/pa)
+* [firmaDigitale](https://developers.openapi.it/services/firmadigitale)
+* [marcheTemporali](https://developers.openapi.it/services/marchetemporali)
+* [pecMassiva](https://developers.openapi.it/services/pecmassiva)
+* [valutometro](https://developers.openapi.it/services/valutometro)
+* [splitpayment](https://developers.openapi.it/services/splitpayment)
+* [europeanVat](https://developers.openapi.it/services/europeanvat)
+* [visengine](https://developers.openapi.it/services/visengine)
+* [postontarget](https://developers.openapi.it/services/postontarget)
+* [domains](https://developers.openapi.it/services/domains)
 
 While most of them are straight forward, some may need additional explanation. Please check out the more comprehensive documentation:
 
