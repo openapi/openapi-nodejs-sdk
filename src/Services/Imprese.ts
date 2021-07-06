@@ -12,7 +12,7 @@ export interface SearchImprese {
 export class Imprese implements Service {
     client: AxiosInstance;
     readonly service = 'imprese';
-    readonly baseUrl = 'imprese.altravia.com';
+    readonly baseUrl = 'imprese.openapi.it';
     environment: Environment;
 
     constructor(client: AxiosInstance, environment: Environment) {
