@@ -13,6 +13,7 @@ import { EuropeanVat } from "./Services/EuropeanVat";
 import { Visengine } from "./Services/Visengine";
 import { Postontarget } from "./Services/Postontarget";
 import { Domains } from "./Services/Domains";
+import { Sms } from "./Services/Sms";
 
 export type Environment = 'test'| 'production';
 
@@ -51,6 +52,7 @@ class OpenApi {
     visengine?: Visengine;
     postontarget?: Postontarget;
     domains?: Domains;
+    sms?: Sms;
 
     constructor(environment: Environment, username: string, apiKey: string) {
         this.username = username;
@@ -95,17 +97,15 @@ class OpenApi {
             headers: { 'Authorization': 'Bearer ' + this.token }
         });
 
-        [Comuni, Imprese, Geocoding, Pa, FirmaDigitale, MarcheTemporali, PecMassiva, 
+        [Comuni, Sms, Imprese, Geocoding, Pa, FirmaDigitale, MarcheTemporali, PecMassiva, 
             Valutometro, Splitpayment, EuropeanVat, Visengine, Postontarget, Domains
         ].forEach(service => {
             //@ts-ignore
             const s = new service(this.client, this.environment);
-            if (!autoRenew || isServiceInScopes(this.scopes, s.baseUrl)) {
+            
+            if (isServiceInScopes(this.scopes, s.baseUrl)) {
                 //@ts-ignore
                 this[s.service] = s;
-            } else {
-                //@ts-ignore
-                this[s.service] = this.missingScope();
             }
         });
         
@@ -150,10 +150,6 @@ class OpenApi {
         return 'https://'+ this.prefix +'oauth.altravia.com';
     }
 
-    get missingScope() {
-        throw 'Missing scopes for this WS';
-    }
-
     get prefix() {
         return this.environment === 'test' ? 'test.': '';
     }
@@ -163,7 +159,7 @@ class OpenApi {
     }
 
     static async init(environment: Environment, username: string, apiKey: string, token?: string, autoRenew = true) {
-        const openapi = new OpenApi('test', username, apiKey);
+        const openapi = new OpenApi(environment, username, apiKey);
         
         if (token) {
             await openapi.createClient(token, autoRenew);

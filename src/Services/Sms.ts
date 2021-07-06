@@ -19,7 +19,7 @@ export interface SmsRecipient {
 
 export class Sms implements Service {
     client: AxiosInstance;
-    readonly service = 'messages';
+    readonly service = 'sms';
     readonly baseUrl = 'ws.messaggisms.com';
     environment: Environment;
 
@@ -33,8 +33,8 @@ export class Sms implements Service {
      * @returns Ritorna la lista di tutti i messaggi inviati
      */
     async getMessages(id?: string): Promise<Array<any>> {
-        const query = id ? `/${id}` : '';
-        return await (await this.client.get(this.url + '/messages' + query)).data.data;
+        const query = id ? `${id}` : '';
+        return await (await this.client.get(this.url + '/messages/' + query)).data.data;
     }
 
     /**
@@ -53,7 +53,7 @@ export class Sms implements Service {
             throw 'sender number length must be less than 14 chars and more than 3'
         }
 
-        return await (await this.client.post(this.url + '/messages', JSON.stringify({
+        return await (await this.client.post(this.url + '/messages/', JSON.stringify({
             test, sender, recipients, body: message, transaction: false, priority 
         }))).data.data;
     }
