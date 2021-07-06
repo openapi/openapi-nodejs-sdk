@@ -46,8 +46,8 @@ Once the client has been initialized, we can start making requests: all the avai
 As an example, let's request the list of all cities in a given CAP
 
 ```js
-try {
     const cities = await client.comuni.getCitiesByCap('00132')
+try {
 } catch(err) {
     // err handling logic...
 }
@@ -88,3 +88,4 @@ Currently, those are the available web services:
 While most of them are straight forward, some may need additional explanation. Please check out the more comprehensive documentation:
 
 [VISENGINE](/docs/visengine.md)
+[SMS](/docs/sms.md)
