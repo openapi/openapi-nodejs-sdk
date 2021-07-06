@@ -122,9 +122,6 @@ export class Visengine implements Service {
             newFields[`json_visura.${key}`] = value;
         }
 
-        console.log(newFields); return
-        
-
         let body: {[key:string]: any} = { state: this.getTransactionStatus(transaction), ...newFields };
         return await (await this.client.put(this.url + '/richiesta/' + id, JSON.stringify(body))).data.data;
     }
