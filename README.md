@@ -43,7 +43,17 @@ const token = await client.generateToken(scopes);
 
 // The client is now ready to make requests
 ```
-### Undefined methods
+Please note that wildcards for **base urls** are not supported at the moment:
+```js
+// This will work
+const token = await client.generateToken('*:pa.openapi.it/*');
+// This is equivalent to the previous (just a shortcut)
+const token = await client.generateToken('pa.openapi.it');
+
+// This will NOT work
+const token = await client.generateToken('*:*/*');
+```
+### Heads up: `undefined` methods
 The client will instantiate **only the instances needed** based on the provided token: if you get `undefined` method when you attempt to run a request, please check if you have all the required permissions.
 
 ## Make requests
