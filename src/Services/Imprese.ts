@@ -9,6 +9,16 @@ export interface SearchImprese {
     cf?: string;
 }
 
+interface AutocompleteImprese {
+  id: string;
+  denominazione: string;
+}
+
+interface NaturaGiuridica {
+  codice_natura_giuridica: string;
+  valore: string;
+}
+
 export class Imprese implements Service {
     client: AxiosInstance;
     readonly service = 'imprese';
@@ -42,12 +52,29 @@ export class Imprese implements Service {
         const res = (await this.client.get(this.url + '/pec/' + partitaIva)).data.data
         return res.pec ? res.pec : res;
     }
+    
+    /**
+     * Autocomplete service
+     * Wildcards (*) can be used at the beginning or at the end of the string.
+     */
+    async autocomplete(query: string): Promise<AutocompleteImprese[]> {
+        if (!query.match(/\*/)) query = `*${query}*`
+        return await (await this.client.get(this.url + '/autocomplete/' + query)).data.data;
+    }
 
     /**
      * Richiede accesso ad /advance
      */
     async search(searchQuery: SearchImprese): Promise<Array<any>> {
         return await (await this.client.get(this.url + '/advance', { params: searchQuery })).data.data;
+    }
+
+    async listFormeGiuridiche(): Promise<NaturaGiuridica[]> {
+        return await (await this.client.get(this.url + '/forma_giuridica')).data.data;
+    }
+
+    async getFormaGiuridica(legalCode: string): Promise<NaturaGiuridica> {
+        return await (await this.client.get(this.url + '/forma_giuridica/' + legalCode)).data.data;
     }
 
     get url() {
