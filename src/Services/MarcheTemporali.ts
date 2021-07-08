@@ -74,7 +74,13 @@ export class MarcheTemporali implements Service {
         return (availability >= amount);
     }
 
-    
+    async mark(username: string, password: string, file: string, type: 'infocert' | 'aruba' , mime = false) {
+        return await (await this.client.post(this.url + '/marca', JSON.stringify({username, password, file, mime, type}))).data.data;
+    }
+
+    async analyze(file: string) {
+        return await (await this.client.post(this.url + '/analisi', JSON.stringify({file}))).data.data;
+    }
 
     get url() {
         return getBaseUrl(this.environment, this.baseUrl)
