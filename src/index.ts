@@ -14,6 +14,7 @@ import { Visengine } from "./Services/Visengine";
 import { Postontarget } from "./Services/Postontarget";
 import { Domains } from "./Services/Domains";
 import { Sms } from "./Services/Sms";
+import { UfficioPostale } from "./Services/UfficioPostale";
 
 export type Environment = 'test'| 'production';
 
@@ -53,6 +54,7 @@ class OpenApi {
     postontarget?: Postontarget;
     domains?: Domains;
     sms?: Sms;
+    ufficioPostale?: UfficioPostale;
 
     constructor(environment: Environment, username: string, apiKey: string) {
         this.username = username;
@@ -98,7 +100,7 @@ class OpenApi {
         });
 
         [Comuni, Sms, Imprese, Geocoding, Pa, FirmaDigitale, MarcheTemporali, PecMassiva, 
-            Valutometro, Splitpayment, EuropeanVat, Visengine, Postontarget, Domains
+            Valutometro, Splitpayment, EuropeanVat, Visengine, Postontarget, Domains, UfficioPostale
         ].forEach(service => {
             //@ts-ignore
             const s = new service(this.client, this.environment);
