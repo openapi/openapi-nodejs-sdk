@@ -9,7 +9,8 @@
   "scripts": {
     "test": "tsc && jest -config=jest.config.json --all",
     "build": "tsc",
-    "release": "git tag `npm view '@altravia/openapi' version` && npm publish"
+    "tag": "git tag `npm view '@altravia/openapi' version`",
+    "patch": "npm version patch && npm run tag"
   },
   "homepage": "https://developers.openapi.it",
   "repository": {
