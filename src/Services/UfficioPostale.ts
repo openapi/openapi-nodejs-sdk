@@ -109,7 +109,7 @@ export class UfficioPostale implements Service {
     }
 
     async listRaccomandate(state?: 'NEW' | 'CONFIRMED' | 'SENDING' | 'SENT' | 'ERROR'): Promise<SigleRaccomandata[]> {
-        return await (await this.client.get(this.url + '/raccomandate' + (state ? `/${state}` : ''))).data.data;
+        return await (await this.client.get(this.url + '/raccomandate/', state ? { params: { state }} : {})).data;
     }
 
     async getRaccomandata(id: string) {
@@ -117,11 +117,20 @@ export class UfficioPostale implements Service {
     }
 
     async createRaccomandataRequest(mittente: Mittente, destinatari: Destinatari, documento: string[], opzioni: Opzioni = {}, autoconfirm = false): Promise<RaccomandataResponse[] | any[]> {
-        if (!('autoconfirm' in opzioni)) opzioni = { ...opzioni, autoconfirm }
-        return await (await this.client.post(this.url + '/raccomandate', JSON.stringify({mittente, destinatari, documento, opzioni}))).data.data;
+        if (opzioni && !('autoconfirm' in opzioni)) opzioni = { ...opzioni, autoconfirm }
+        return await (await this.client.post(this.url + '/raccomandate/', JSON.stringify({mittente, destinatari, documento, opzioni}))).data.data;
     }
 
+    /**
+     * Conferma l'invio della raccomandata. 
+     * Accetta un id od un oggetto `RaccomandataResponse` ritornato durante la richiesta; se viene passato un array di richieste, ne prende in considerazione solo la prima
+     */
     async confirmRequest(request_id: string | RaccomandataResponse) {
+        if (Array.isArray(request_id)) {
+            request_id = request_id[0]
+        }
+
+
         const id: string = (typeof request_id === 'object' && 'id' in request_id) ? request_id.id : request_id;
         return await (await this.client.patch(this.url + '/raccomandate/' + id, JSON.stringify({'confirmed': true}))).data.data;
     }
