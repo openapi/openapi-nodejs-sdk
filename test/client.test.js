@@ -188,3 +188,44 @@ const scopes = [
 //     expect(sms).toBeDefined()
 //     console.log(JSON.stringify(sms, null, 2));
 // })
+
+test('testUP', async function() {
+    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+    // const list = await client.ufficioPostale.listRaccomandate('NEW')
+    // expect(list).toBeDefined()
+    const mitt = {
+        "titolo": "mr",
+        "nome": "Simone",
+        "dug": "SST",
+        "indirizzo": "Valnerina",
+        "civico": "1",
+        "comune": "montefranco",
+        "cap": "05030",
+        "provincia": "tr",
+        "nazione": "Italia",
+        "email": "s.desantis@altravia.com",
+        "ragione_sociale": "privato",
+        "cognome": "xxx"
+    }
+
+    const dest = {
+        "nome": "Simone",
+        "cognome": "Desantis",
+        "co": "Altravia Servizi SRL",
+        "dug": "piazza",
+        "indirizzo": "San Giovanni Decollato",
+        "civico": "6",
+        "comune": "Terni",
+        "cap": "05100",
+        "provincia": "TR",
+        "nazione": "Italia"
+    }
+
+    const racc = await client.ufficioPostale.createRaccomandataRequest(mitt, [dest], ['Titolo', 'corpo'], {}).catch(err => console.log(err))
+    expect(racc).toBeDefined()
+    // console.log(racc);
+
+    const c = await client.ufficioPostale.confirmRequest(racc).catch(err => console.log(err))
+    console.log(c);
+})
+
