@@ -11,7 +11,7 @@ const OpenApi = require('@altravia/openapi').default;
 ```
 
 ## Usage
-In order to use the client, you need an active openapi.it account. You can register for free on developers.openapi.it.
+In order to use the client, you need an active openapi.it account. You can register for free on [developers.openapi.it](developers.openapi.it).
 
 We can now initialize the client with the credentials that we find in our dashboard and a **valid token**
 ```js
@@ -19,7 +19,7 @@ const client = await OpenApi.init('production', your@email.com, your_production_
 ```
 Where `production` (or `test`) is the environment we want to work in; please note that API Keys and tokens for the production and test environment are different.
 
-If you want to see your active tokens, please visit developers.openapi.it/tokens.
+If you want to see your active tokens, please visit [developers.openapi.it/tokens](developers.openapi.it/tokens).
 
 Besides, the client will automatically renew the provided token when needed.
 
