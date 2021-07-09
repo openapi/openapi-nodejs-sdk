@@ -100,8 +100,10 @@ Currently, those are the available web services:
 * [visengine](https://developers.openapi.it/services/visengine)
 * [postontarget](https://developers.openapi.it/services/postontarget)
 * [domains](https://developers.openapi.it/services/domains)
+* [ufficioPostale](https://developers.openapi.it/services/ufficiopostale)
 
 While most of them are straight forward, some may need additional explanation. Please check out the more comprehensive documentation:
 
 [VISENGINE](/docs/visengine.md)
+
 [SMS](/docs/sms.md)
