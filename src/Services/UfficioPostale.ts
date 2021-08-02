@@ -11,6 +11,22 @@ interface SigleRaccomandata {
   id: string;
 }
 
+interface SingleTelegramma {
+  mittente: TelegrammaMittente;
+  creation_timestamp: number;
+  update_timestamp: number;
+  confirmed: boolean;
+  state: string;
+  error?: any;
+  id: string;
+}
+
+interface TelegrammaMittente {
+  nome: string;
+  cognome: string;
+  email: string;
+}
+
 interface Mittente {
   nome: string;
   cognome: string;
@@ -90,7 +106,7 @@ interface Documentovalidato {
   size: number;
 }
 
-interface Tracking {
+interface TrackingStatus {
   timestamp: number;
   descrizione: string;
   type: string;
@@ -108,39 +124,42 @@ export class UfficioPostale implements Service {
         this.environment = environment;
     }
 
-    async listRaccomandate(state?: 'NEW' | 'CONFIRMED' | 'SENDING' | 'SENT' | 'ERROR'): Promise<SigleRaccomandata[]> {
-        return await (await this.client.get(this.url + '/raccomandate/', state ? { params: { state }} : {})).data;
+    async listDug(): Promise<{codice_dug: string; dug: string}[]> {
+        return await (await this.client.get(this.url + '/dug')).data.data;
+    }
+
+    async addresses(cap: string, comune: string, dug: string) {
+        return await (await this.client.get(this.url + '/indirizzi', { params: {cap, comune, dug}})).data.data;
+    }
+
+    async pricing(cap: string, comune: string, dug: string): Promise<Array<any>> {
+        return await (await this.client.get(this.url + '/pricing')).data.data;
+    }
+
+    async track(id: string): Promise<TrackingStatus[]> {
+        return await (await this.client.get(this.url + '/tracking/' + id)).data.data;
+    }
+
+    async comuni(postalCode: string) {
+        return await (await this.client.get(this.url + '/comuni/' + postalCode)).data.data;
+    }
+
+    // @todo Raccomandate
+    async listRaccomandate(): Promise<SigleRaccomandata[]> {
+        return await (await this.client.get(this.url + '/raccomandate')).data.data;
     }
 
     async getRaccomandata(id: string) {
-        return await (await this.client.get(this.url + '/raccomandate' +  `/${id}`)).data.data;
+        return await (await this.client.get(this.url + '/raccomandate/' + id)).data.data;
     }
 
-    async createRaccomandataRequest(mittente: Mittente, destinatari: Destinatari, documento: string[], opzioni: Opzioni = {}, autoconfirm = false): Promise<RaccomandataResponse[] | any[]> {
-        if (opzioni && !('autoconfirm' in opzioni)) opzioni = { ...opzioni, autoconfirm }
-        return await (await this.client.post(this.url + '/raccomandate/', JSON.stringify({mittente, destinatari, documento, opzioni}))).data.data;
+    // @todo Telegrammi
+    async listTelegrammi(): Promise<SingleTelegramma[]> {
+        return await (await this.client.get(this.url + '/telegrammi')).data.data;
     }
 
-    /**
-     * Conferma l'invio della raccomandata. 
-     * Accetta un id od un oggetto `RaccomandataResponse` ritornato durante la richiesta; se viene passato un array di richieste, ne prende in considerazione solo la prima
-     */
-    async confirmRequest(request_id: string | RaccomandataResponse) {
-        if (Array.isArray(request_id)) {
-            request_id = request_id[0]
-        }
-
-
-        const id: string = (typeof request_id === 'object' && 'id' in request_id) ? request_id.id : request_id;
-        return await (await this.client.patch(this.url + '/raccomandate/' + id, JSON.stringify({'confirmed': true}))).data.data;
-    }
-
-    async track(tracking_number: string): Promise<Tracking[]> {
-        return await (await this.client.get(this.url + '/traking/' + tracking_number)).data.data;
-    }
-
-    async listDug(): Promise<{codice_dug: string; dug: string}[]> {
-        return await (await this.client.get(this.url + '/dug')).data.data;
+    async getTelegramma(id: string) {
+        return await (await this.client.get(this.url + '/telegrammi/' + id)).data.data;
     }
 
     get url() {
