@@ -75,7 +75,7 @@ interface RaccomandataResponse {
   mittente?: Mittente;
   destinatari?: Destinatario[];
   documento?: string[];
-  opzioni?: Opzioni;
+  opzioni?: OpzioniRaccomandata;
   prodotto?: string;
   creation_timestamp?: number;
   update_timestamp?: number;
@@ -135,15 +135,15 @@ export class UfficioPostale implements Service {
     }
 
     async listDug(): Promise<{codice_dug: string; dug: string}[]> {
-        return await (await this.client.get(this.url + '/dug')).data.data;
+        return await (await this.client.get(this.url + '/dug/')).data.data;
     }
 
     async addresses(cap: string, comune: string, dug: string) {
         return await (await this.client.get(this.url + '/indirizzi', { params: {cap, comune, dug}})).data.data;
     }
 
-    async pricing(cap: string, comune: string, dug: string): Promise<Array<any>> {
-        return await (await this.client.get(this.url + '/pricing')).data.data;
+    async pricing(): Promise<Array<any>> {
+        return await (await this.client.get(this.url + '/pricing/')).data.data;
     }
 
     async track(id: string): Promise<TrackingStatus[]> {
@@ -163,8 +163,9 @@ export class UfficioPostale implements Service {
         return await (await this.client.get(this.url + '/raccomandate/' + id)).data.data;
     }
 
-    async createRaccomandata(mittente: Mittente, destinatari: Destinatario[], documento: string[], autoconfirm = true, options: OpzioniRaccomandata = {}) {
-        return await (await this.client.post(this.url + '/raccomandate/', JSON.stringify({ mittente, destinatari, documento, options: { autoconfirm, ...options } }))).data.data;
+    async createRaccomandata(mittente: Mittente, destinatari: Destinatario[], documento: string[], autoconfirm = true, options: OpzioniRaccomandata = {}): Promise<any[]> {
+        if (!Array.isArray(destinatari)) destinatari = [destinatari];
+        return await (await this.client.post(this.url + '/raccomandate/', JSON.stringify({ mittente, destinatari, documento, opzioni: { autoconfirm, ...options } }))).data.data;
     }
 
     async confirmRaccomandata(id: string) {
@@ -180,8 +181,9 @@ export class UfficioPostale implements Service {
         return await (await this.client.get(this.url + '/telegrammi/' + id)).data.data;
     }
 
-    async createTelegramma(mittente: Mittente, destinatari: Destinatario[], documento: string, autoconfirm = true, options: OpzioniTelegramma = {}) {
-        return await (await this.client.post(this.url + '/telegrammi/', JSON.stringify({ mittente, destinatari, documento, options: { autoconfirm, ...options } }))).data.data;
+    async createTelegramma(mittente: Mittente, destinatari: Destinatario[], documento: string, autoconfirm = true, options: OpzioniTelegramma = {}): Promise<any[]> {
+        if (!Array.isArray(destinatari)) destinatari = [destinatari];
+        return await (await this.client.post(this.url + '/telegrammi/', JSON.stringify({ mittente, destinatari, documento, opzioni: { autoconfirm, ...options } }))).data.data;
     }
 
     async confirmTelegramma(id: string) {

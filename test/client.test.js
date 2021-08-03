@@ -221,11 +221,26 @@ test('testUP', async function() {
         "nazione": "Italia"
     }
 
-    const racc = await client.ufficioPostale.createRaccomandataRequest(mitt, [dest], ['Titolo', 'corpo'], {}).catch(err => console.log(err))
-    expect(racc).toBeDefined()
-    // console.log(racc);
+    // const comuni = await client.ufficioPostale.comuni('00143')
+    // expect(comuni).toBeDefined()
+    // console.log(comuni);
 
-    const c = await client.ufficioPostale.confirmRequest(racc).catch(err => console.log(err))
-    console.log(c);
+    // const r = await client.ufficioPostale.createRaccomandata(mitt, [dest], ['Test'], false).catch(e => console.log(e))
+    // const result = await client.ufficioPostale.confirmRaccomandata(r[0].id).catch(e => console.log(e))
+    // expect(result).toBeDefined()
+    // console.log(result);
+
+    // const t = await client.ufficioPostale.createTelegramma(mitt, [dest], 'Test', false)
+    // const resultTelegramma = await client.ufficioPostale.confirmTelegramma(t[0].id).catch(e => console.log(e))
+    // expect(resultTelegramma).toBeDefined()
+    // console.log(resultTelegramma);
+
+    // const pricing = await client.ufficioPostale.pricing().catch(e => console.log(e))
+    // expect(pricing).toBeDefined()
+    // console.log(pricing);
+
+    // const dugs = await client.ufficioPostale.listDug().catch(e => console.log(e))
+    // expect(dugs).toBeDefined()
+    // console.log(dugs)
 })
 
