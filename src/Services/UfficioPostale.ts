@@ -31,20 +31,30 @@ interface Mittente {
   nome: string;
   cognome: string;
   email?: string;
+  dug: string;
+  indirizzo?: string;
+  civico?: string;
+  comune?: string;
+  cap?: string;
+  provincia?: string;
+  nazione?: string;
 }
 
-interface Opzioni {
+interface OpzioniRaccomandata {
   fronteretro?: boolean;
   colori?: boolean;
   autoconfirm?: boolean;
   ar?: boolean;
-  timestamp_invio?: any;
-  callback_url?: any;
-  callback_field?: any;
-  custom?: any;
 }
 
-interface Destinatari {
+interface OpzioniTelegramma {
+  fronteretro?: boolean;
+  colori?: boolean;
+  autoconfirm?: boolean;
+  ar?: boolean;
+}
+
+interface Destinatario {
   nome?: string;
   cognome?: string;
   comune?: string;
@@ -63,7 +73,7 @@ interface Destinatari {
 
 interface RaccomandataResponse {
   mittente?: Mittente;
-  destinatari?: Destinatari[];
+  destinatari?: Destinatario[];
   documento?: string[];
   opzioni?: Opzioni;
   prodotto?: string;
@@ -144,7 +154,7 @@ export class UfficioPostale implements Service {
         return await (await this.client.get(this.url + '/comuni/' + postalCode)).data.data;
     }
 
-    // @todo Raccomandate
+    // Raccomandate
     async listRaccomandate(): Promise<SigleRaccomandata[]> {
         return await (await this.client.get(this.url + '/raccomandate')).data.data;
     }
@@ -153,13 +163,29 @@ export class UfficioPostale implements Service {
         return await (await this.client.get(this.url + '/raccomandate/' + id)).data.data;
     }
 
-    // @todo Telegrammi
+    async createRaccomandata(mittente: Mittente, destinatari: Destinatario[], documento: string[], autoconfirm = true, options: OpzioniRaccomandata = {}) {
+        return await (await this.client.post(this.url + '/raccomandate/', JSON.stringify({ mittente, destinatari, documento, options: { autoconfirm, ...options } }))).data.data;
+    }
+
+    async confirmRaccomandata(id: string) {
+        return await (await this.client.patch(this.url + '/raccomandate/' + id, JSON.stringify({ confirmed: true }))).data.data;
+    }
+
+    // Telegrammi
     async listTelegrammi(): Promise<SingleTelegramma[]> {
         return await (await this.client.get(this.url + '/telegrammi')).data.data;
     }
 
     async getTelegramma(id: string) {
         return await (await this.client.get(this.url + '/telegrammi/' + id)).data.data;
+    }
+
+    async createTelegramma(mittente: Mittente, destinatari: Destinatario[], documento: string, autoconfirm = true, options: OpzioniTelegramma = {}) {
+        return await (await this.client.post(this.url + '/telegrammi/', JSON.stringify({ mittente, destinatari, documento, options: { autoconfirm, ...options } }))).data.data;
+    }
+
+    async confirmTelegramma(id: string) {
+        return await (await this.client.patch(this.url + '/telegrammi/' + id, JSON.stringify({ confirmed: true }))).data.data;
     }
 
     get url() {

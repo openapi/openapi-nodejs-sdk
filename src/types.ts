@@ -6,3 +6,5 @@ export interface Callback {
     field?: string;
     data?: any
 }
+
+export type Transaction = 'open' | 'close';
