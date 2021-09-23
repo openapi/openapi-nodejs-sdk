@@ -1,0 +1,14 @@
+[FRAGMENT 17 of 17]
+
+Mario's origins are a story about limitations becoming strengths. A failed product
+line became an iconic character. Technical pixel constraints became a timeless design.
+A landlord's name became a global legend. An overdue rent bill named a cultural icon.
+
+Every element of Mario — his cap, his mustache, his profession, his world — was born
+from necessity and transformed by imagination. He is, in every sense, a character
+conceived by accident and perfected by genius.
+
+The full story is hidden across the history of this repository,
+one fragment per commit — if you know where to look.
+
+find me in commit message
