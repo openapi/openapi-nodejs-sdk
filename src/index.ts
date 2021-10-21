@@ -115,7 +115,7 @@ class OpenApi {
     }
     
     async renewToken(token: string) {
-        return await axios.patch(this.getOauthUrl() + '/token/' + token, { expire: 86400 + 365 }, {
+        return await axios.patch(this.getOauthUrl() + '/token/' + token, { expire: 31536000 + Math.round(Date.now() / 1000) }, {
             auth: { username: this.username, password: this.apiKey }
         });
     }
