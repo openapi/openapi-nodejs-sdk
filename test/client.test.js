@@ -1,4 +1,5 @@
 // import OpenApi from '../dist/index';
+const fs = require('fs');
 let OpenApi = require('../dist/index').default;
 
 const scopes = [
@@ -129,18 +130,35 @@ const scopes = [
 //     const piva = await client.pa.findPa('00559720982')
 //     expect(piva).toBeDefined();
 // })
-// test('testFD', async function() {
-//     let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
-//     const prodotti = await client.firmaDigitale.getProducts();
-//     expect(prodotti).toBeDefined();
 
-//     const richiesta  = await client.firmaDigitale.requestProduct('RINFIR', {})
-//     expect(richiesta.id).toBeDefined()
+test('testFD', async function() {
+    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+    // const prodotti = await client.firmaDigitale.getProducts();
+    // expect(prodotti).toBeDefined();
 
-//     const infoRichiesta = await client.firmaDigitale.getRequest(richiesta.id)
-//     expect(infoRichiesta).toBeDefined()
-//     console.log(infoRichiesta);
-// })
+    // const richiesta  = await client.firmaDigitale.requestProduct('RINFIR', {})
+    // expect(richiesta.id).toBeDefined()
+
+    // const infoRichiesta = await client.firmaDigitale.getRequest(richiesta.id)
+    // expect(infoRichiesta).toBeDefined()
+    // console.log(infoRichiesta);
+    
+    const listaFirmaElettroniche = await client.firmaDigitale.listFirmaElettronica();
+    expect(listaFirmaElettroniche).toBeDefined();
+    console.log(listaFirmaElettroniche);
+
+    const pdf = await fs.promises.readFile(__dirname + '/resources/testosemplice.pdf')
+    const newFirmaElettronica =  await client.firmaDigitale.createFirmaElettronica('test.pdf', pdf.toString('base64'), [
+        {
+            'firstname': 'test',
+            'lastname': 'test',
+            'email': 'test@altravia.com',
+            'phone': '+39321321321',
+        }
+    ]).catch(e => console.log(e))
+
+    expect(newFirmaElettronica).toBeDefined();
+})
 
 // test('testMT', async function() {
 //     let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
@@ -189,58 +207,58 @@ const scopes = [
 //     console.log(JSON.stringify(sms, null, 2));
 // })
 
-test('testUP', async function() {
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
-    // const list = await client.ufficioPostale.listRaccomandate('NEW')
-    // expect(list).toBeDefined()
-    const mitt = {
-        "titolo": "mr",
-        "nome": "Simone",
-        "dug": "SST",
-        "indirizzo": "Valnerina",
-        "civico": "1",
-        "comune": "montefranco",
-        "cap": "05030",
-        "provincia": "tr",
-        "nazione": "Italia",
-        "email": "s.desantis@altravia.com",
-        "ragione_sociale": "privato",
-        "cognome": "xxx"
-    }
+// test('testUP', async function() {
+//     let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+//     // const list = await client.ufficioPostale.listRaccomandate('NEW')
+//     // expect(list).toBeDefined()
+//     const mitt = {
+//         "titolo": "mr",
+//         "nome": "Simone",
+//         "dug": "SST",
+//         "indirizzo": "Valnerina",
+//         "civico": "1",
+//         "comune": "montefranco",
+//         "cap": "05030",
+//         "provincia": "tr",
+//         "nazione": "Italia",
+//         "email": "s.desantis@altravia.com",
+//         "ragione_sociale": "privato",
+//         "cognome": "xxx"
+//     }
 
-    const dest = {
-        "nome": "Simone",
-        "cognome": "Desantis",
-        "co": "Altravia Servizi SRL",
-        "dug": "piazza",
-        "indirizzo": "San Giovanni Decollato",
-        "civico": "6",
-        "comune": "Terni",
-        "cap": "05100",
-        "provincia": "TR",
-        "nazione": "Italia"
-    }
+//     const dest = {
+//         "nome": "Simone",
+//         "cognome": "Desantis",
+//         "co": "Altravia Servizi SRL",
+//         "dug": "piazza",
+//         "indirizzo": "San Giovanni Decollato",
+//         "civico": "6",
+//         "comune": "Terni",
+//         "cap": "05100",
+//         "provincia": "TR",
+//         "nazione": "Italia"
+//     }
 
-    // const comuni = await client.ufficioPostale.comuni('00143')
-    // expect(comuni).toBeDefined()
-    // console.log(comuni);
+//     // const comuni = await client.ufficioPostale.comuni('00143')
+//     // expect(comuni).toBeDefined()
+//     // console.log(comuni);
 
-    // const r = await client.ufficioPostale.createRaccomandata(mitt, [dest], ['Test'], false).catch(e => console.log(e))
-    // const result = await client.ufficioPostale.confirmRaccomandata(r[0].id).catch(e => console.log(e))
-    // expect(result).toBeDefined()
-    // console.log(result);
+//     // const r = await client.ufficioPostale.createRaccomandata(mitt, [dest], ['Test'], false).catch(e => console.log(e))
+//     // const result = await client.ufficioPostale.confirmRaccomandata(r[0].id).catch(e => console.log(e))
+//     // expect(result).toBeDefined()
+//     // console.log(result);
 
-    // const t = await client.ufficioPostale.createTelegramma(mitt, [dest], 'Test', false)
-    // const resultTelegramma = await client.ufficioPostale.confirmTelegramma(t[0].id).catch(e => console.log(e))
-    // expect(resultTelegramma).toBeDefined()
-    // console.log(resultTelegramma);
+//     // const t = await client.ufficioPostale.createTelegramma(mitt, [dest], 'Test', false)
+//     // const resultTelegramma = await client.ufficioPostale.confirmTelegramma(t[0].id).catch(e => console.log(e))
+//     // expect(resultTelegramma).toBeDefined()
+//     // console.log(resultTelegramma);
 
-    // const pricing = await client.ufficioPostale.pricing().catch(e => console.log(e))
-    // expect(pricing).toBeDefined()
-    // console.log(pricing);
+//     // const pricing = await client.ufficioPostale.pricing().catch(e => console.log(e))
+//     // expect(pricing).toBeDefined()
+//     // console.log(pricing);
 
-    // const dugs = await client.ufficioPostale.listDug().catch(e => console.log(e))
-    // expect(dugs).toBeDefined()
-    // console.log(dugs)
-})
+//     // const dugs = await client.ufficioPostale.listDug().catch(e => console.log(e))
+//     // expect(dugs).toBeDefined()
+//     // console.log(dugs)
+// })
 
