@@ -47,6 +47,12 @@ interface OpzioniRaccomandata {
   ar?: boolean;
 }
 
+interface OpzioniLOL {
+  fronteretro?: boolean;
+  colori?: boolean;
+  autoconfirm?: boolean;
+}
+
 interface OpzioniTelegramma {
   fronteretro?: boolean;
   colori?: boolean;
@@ -154,9 +160,12 @@ export class UfficioPostale implements Service {
         return await (await this.client.get(this.url + '/comuni/' + postalCode)).data.data;
     }
 
-    // Raccomandate
+    /**
+     * Raccomandate
+     */ 
+
     async listRaccomandate(): Promise<SigleRaccomandata[]> {
-        return await (await this.client.get(this.url + '/raccomandate')).data.data;
+        return await (await this.client.get(this.url + '/raccomandate/')).data.data;
     }
 
     async getRaccomandata(id: string) {
@@ -172,9 +181,11 @@ export class UfficioPostale implements Service {
         return await (await this.client.patch(this.url + '/raccomandate/' + id, JSON.stringify({ confirmed: true }))).data.data;
     }
 
-    // Telegrammi
+    /**
+     * Telegrammi
+     */ 
     async listTelegrammi(): Promise<SingleTelegramma[]> {
-        return await (await this.client.get(this.url + '/telegrammi')).data.data;
+        return await (await this.client.get(this.url + '/telegrammi/')).data.data;
     }
 
     async getTelegramma(id: string) {
@@ -189,6 +200,47 @@ export class UfficioPostale implements Service {
     async confirmTelegramma(id: string) {
         return await (await this.client.patch(this.url + '/telegrammi/' + id, JSON.stringify({ confirmed: true }))).data.data;
     }
+
+    /**
+     * Posta ordinaria
+     */ 
+    async listOrdinarie() {
+        return  await (await this.client.get(this.url + '/ordinarie/')).data.data;
+    }
+
+    async getOrdinaria(id: string) {
+        return await (await this.client.get(this.url + '/ordinarie/' + id)).data.data;
+    }
+
+    async createOrdinaria(mittente: Mittente, destinatari: Destinatario[], documento: string, autoconfirm = true, options: OpzioniLOL = {}): Promise<any[]> {
+        if (!Array.isArray(destinatari)) destinatari = [destinatari];
+        return await (await this.client.post(this.url + '/ordinarie/', JSON.stringify({ mittente, destinatari, documento, opzioni: { autoconfirm, ...options } }))).data.data;
+    }
+
+    async confirmOrdinaria(id: string) {
+        return await (await this.client.patch(this.url + '/ordinarie/' + id, JSON.stringify({ confirmed: true }))).data.data;
+    } 
+
+    /**
+     * Posta prioritaria
+     */
+
+    async listPrioritarie() {
+        return await (await this.client.get(this.url + '/prioritarie/')).data.data;
+    }
+
+    async getPrioritaria(id: string) {
+        return await (await this.client.get(this.url + '/prioritarie/' + id)).data.data;
+    }
+
+    async createPrioritaria(mittente: Mittente, destinatari: Destinatario[], documento: string, autoconfirm = true, options: OpzioniLOL = {}): Promise<any[]> {
+        if (!Array.isArray(destinatari)) destinatari = [destinatari];
+        return await (await this.client.post(this.url + '/prioritarie/', JSON.stringify({ mittente, destinatari, documento, opzioni: { autoconfirm, ...options } }))).data.data;
+    }
+
+    async confirmPrioritaria(id: string) {
+        return await (await this.client.patch(this.url + '/prioritarie/' + id, JSON.stringify({ confirmed: true }))).data.data;
+    } 
 
     get url() {
         return getBaseUrl(this.environment, this.baseUrl)
