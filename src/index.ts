@@ -49,7 +49,7 @@ class OpenApi {
     pecMassiva?: PecMassiva;
     valutometro?: Valutometro;
     splitpayment?: Splitpayment;
-    europeanVat?: EuropeanVat;
+    europeanvat?: EuropeanVat;
     visengine?: Visengine;
     postontarget?: Postontarget;
     domains?: Domains;
