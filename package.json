@@ -1,6 +1,6 @@
 {
   "name": "@altravia/openapi",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Official OpenApi NodeJS Client",
   "main": "dist/index.js",
   "files": [
