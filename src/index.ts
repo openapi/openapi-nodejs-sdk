@@ -32,7 +32,7 @@ export interface Service {
     environment: Environment;
 }
 
-class OpenApi {
+class Openapi {
     client?: AxiosInstance;
     environment: Environment;
     token?: string;
@@ -63,7 +63,7 @@ class OpenApi {
     }
     
     /**
-     * Crea il client di connessione con OpenApi
+     * Crea il client di connessione con Openapi
      * Se l'autoRenew è attivo, controllerá lo stato del token
      * prima di istanziare il client, ed in caso lo rinnoverà
      */
@@ -79,7 +79,7 @@ class OpenApi {
             if (tokenData.status === 200 ) {
                 const scopes: Array<any> = tokenData.data.data[0].scopes;
                 scopes.forEach(scope => {
-                    const url = OpenApi.splitScope(scope);
+                    const url = Openapi.splitScope(scope);
                     this.scopes.push({ mode: scope.split(':', 1), domain: url[0], method: url[1] });
                 })
 
@@ -134,7 +134,7 @@ class OpenApi {
                 scope = '*:' + scope.replace('/', '') + '/*';
             }
             
-            const url = OpenApi.splitScope(scope);
+            const url = Openapi.splitScope(scope);
             return `${scope.split(':', 1)}:${this.prefix}${url[0].replace(/^test.|dev./, '')}/${url[1]}`
         });
 
@@ -165,7 +165,7 @@ class OpenApi {
     }
 
     static async init(environment: Environment, username: string, apiKey: string, token?: string, autoRenew = true) {
-        const openapi = new OpenApi(environment, username, apiKey);
+        const openapi = new Openapi(environment, username, apiKey);
         
         if (token) {
             await openapi.createClient(token, autoRenew);
@@ -175,4 +175,4 @@ class OpenApi {
     }
 }
 
-export default OpenApi;
+export default Openapi;
