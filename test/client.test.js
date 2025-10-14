@@ -1,6 +1,6 @@
-// import OpenApi from '../dist/index';
+// import Openapi from '../dist/index';
 const fs = require('fs');
-let OpenApi = require('../dist/index').default;
+let Openapi = require('../dist/index').default;
 
 const scopes = [
     "GET:ws.ufficiopostale.com/raccomandate",
@@ -30,27 +30,27 @@ const scopes = [
 
 test('init', async function() {
     
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+    let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
     const token = await client.generateToken(scopes);
     expect(typeof token === 'string').toBeTruthy()
 })
 
 test('initWithString', async function() {
     
-    let client = await OpenApi.init('production', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+    let client = await Openapi.init('production', process.env.OPENAPI_USERNAME, process.env.API_KEY);
     const token = await client.generateToken('imprese.altravia.com');
     expect(typeof token === 'string').toBeTruthy()
     console.log(client.scopes);
 })
 
 test('initWithToken', async function() {
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+    let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
     expect(client.comuni).toBeDefined();
 })
 
 test('initWithOldToken', async function() {
     
-    let client = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+    let client = new Openapi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
     
     const token = process.env.OLD_TOKEN;
     expect(typeof token === 'string').toBe(true);
@@ -60,7 +60,7 @@ test('initWithOldToken', async function() {
 
 test('initWithSkip', async function() {
     
-    let client = new OpenApi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+    let client = new Openapi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
     
     const token = process.env.TOKEN;
     expect(typeof token === 'string').toBe(true);
@@ -79,7 +79,7 @@ test('testComuni', async function() {
     const token = process.env.TOKEN;
     expect(typeof token === 'string').toBe(true);
     
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, token);
+    let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, token);
     
 
     const cap = await client.comuni.getCitiesByCap('00121')
@@ -98,7 +98,7 @@ test('testComuni', async function() {
 })
 
 test('testImprese', async function() {
-     let client = await OpenApi.init('production', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+     let client = await Openapi.init('production', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
     console.log(JSON.stringify(client.scopes, null, 2));
 
     const piva = await client.imprese.getByPartitaIva('12485671007')
@@ -125,14 +125,14 @@ test('testImprese', async function() {
 })
 
 test('testPa', async function() {
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+    let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
     client.generateToken(scopes)
     const piva = await client.pa.findPa('00559720982')
     expect(piva).toBeDefined();
 })
 
 test('testFD', async function() {
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+    let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
     // const prodotti = await client.firmaDigitale.getProducts();
     // expect(prodotti).toBeDefined();
 
@@ -161,13 +161,13 @@ test('testFD', async function() {
 })
 
 test('testMT', async function() {
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+    let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
     const lotto = await client.marcheTemporali.checkLotto('FAKETSA.altravia16', 'FAKE9R155S9VF');
     expect(lotto.used).toBeDefined()
 })
 
 test('testValutometro', async function() {
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+    let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
     const p = await client.valutometro.listPropertyTypes()
     expect(p[0]).toBeDefined()
     
@@ -180,7 +180,7 @@ test('testValutometro', async function() {
 })
 
 test('testVisengine', async function() {
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+    let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
     const s = await client.visengine.listServices()
     expect(s[0]).toBeDefined()
 
@@ -199,7 +199,7 @@ test('testVisengine', async function() {
 
 
 test('testsms', async function() {
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+    let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
     // const list = await client.sms.getMessages()
     // console.log(list);
     const sms = await client.sms.send('test', 'Test sms', ['+39-3939989741'], 0, {}, true)
@@ -208,7 +208,7 @@ test('testsms', async function() {
 })
 
 test('testUP', async function() {
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
+    let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
     // const list = await client.ufficioPostale.listRaccomandate('NEW')
     // expect(list).toBeDefined()
     const mitt = {
@@ -263,7 +263,7 @@ test('testUP', async function() {
 })
 
 test('testUPlol', async function() {
-    let client = await OpenApi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
+    let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
     await client.generateToken('ws.ufficiopostale.com');
     const mitt = {
         "titolo": "mr",
