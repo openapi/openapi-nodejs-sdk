@@ -11,6 +11,9 @@ export interface Company {
   company_address?: string;
 }
 
+/**
+ * Service for validating European VAT numbers (VIES)
+ */
 export class EuropeanVat implements Service {
     client: AxiosInstance;
     readonly service = 'europeanvat';
@@ -22,10 +25,21 @@ export class EuropeanVat implements Service {
         this.environment = environment;
     }
 
+    /**
+     * Validates and retrieves company information by European VAT number
+     * @param country - Two-letter country code (e.g., 'IT', 'DE', 'FR')
+     * @param vat - The VAT number to validate
+     * @returns Company information including validation status
+     */
     async getInformation(country: string, vat?: string): Promise<Company> {
+        // TODO: Validate country code format and VAT parameter
+        // TODO: Add graceful error messages for invalid VAT numbers or country codes
         return await (await this.client.get(this.url + '/companies/' + country + '/' + vat)).data.data;
     }
 
+    /**
+     * Gets the full service URL based on environment
+     */
     get url() {
         return getBaseUrl(this.environment, this.baseUrl)
     }
