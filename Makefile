@@ -14,15 +14,15 @@
 #                                                                             #
 #   ═══════════════════════════════════════════════════════════════════════   #
 #                                                                             #
-#   Project:        openapi-rust-sdk                                          #
+#   Project:        openapi-nodejs-sdk                                        #
 #   Version:        0.1.0                                                     #
 #   Author:         Michael Cuffaro (@maiku1008)                              #
 #   Copyright:      (c) 2025 Openapi®. All rights reserved.                   #
 #   License:        MIT                                                       #
 #   Maintainer:     Francesco Bianco                                          #
 #   Contact:        https://openapi.com/                                      #
-#   Repository:     [Repository URL]                                          #
-#   Documentation:  [Docs URL]                                                #
+#   Repository:     https://github.com/openapi/openapi-nodejs-sdk             #
+#   Documentation:  https://console.openapi.com/                              #
 #                                                                             #
 #   ═══════════════════════════════════════════════════════════════════════   #
 #                                                                             #
