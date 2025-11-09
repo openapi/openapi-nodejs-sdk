@@ -17,6 +17,9 @@ interface Dettagliocomuni {
   codice_istat: string;
 }
 
+/**
+ * Service for querying Italian municipalities, provinces, and regions data
+ */
 export class Comuni implements Service {
     client: AxiosInstance;
     readonly service = 'comuni';
@@ -28,49 +31,87 @@ export class Comuni implements Service {
         this.environment = environment;
     }
 
+    /**
+     * Retrieves cities by postal code (CAP)
+     * @param cap - Italian postal code
+     */
     async getCitiesByCap(cap: string): Promise<Provincia[]> {
+        // TODO: Add validation for CAP format and provide graceful error message for invalid/not found CAP
         return await (await this.client.get(this.url + '/cap/' + cap)).data.data;
     }
 
+    /**
+     * Gets municipality information by cadastral code
+     * @param codiceCatastale - The cadastral code
+     */
     async getComuneByCatasto(codiceCatastale: string) {
+        // TODO: Validate cadastral code format and handle not found cases with user-friendly messages
         return await (await this.client.get(this.url + '/catastale/' + codiceCatastale)).data.data;
     }
 
-    //Regioni
+    // Region-related methods
 
+    /**
+     * Lists all Italian regions (sorted alphabetically)
+     */
     async getRegioni() {
+        // TODO: Add error handling for API failures
         const regioni: Array<string> = await (await this.client.get(this.url + '/regioni')).data.data;
         return regioni.sort();
     }
 
+    /**
+     * Gets all provinces within a specific region
+     * @param regione - The region name
+     */
     async getRegione(regione: string): Promise<Provincia[]> {
+        // TODO: Validate region name and provide helpful error message if region not found
         return await (await this.client.get(this.url + '/regioni/' + regione)).data.data;
     }
 
-    // Provincie
+    // Province-related methods
 
     /**
-     * @return Ritorna un oggetto chiave-valore delle province,
-     * definito come { codice_privicia: nome_provincia }
+     * Lists all Italian provinces
+     * @returns Key-value object of provinces { province_code: province_name }
      */
     async listProvince() {
+        // TODO: Add error handling for API failures
         return await (await this.client.get(this.url + '/province')).data.data;
     }
 
+    /**
+     * Gets detailed information about a specific province
+     * @param provincia - The province code or name
+     */
     async getProvincia(provincia?: string): Promise<Provincia> {
+        // TODO: Add validation for empty provincia parameter and graceful error message
         return await (await this.client.get(this.url + '/province/' + provincia)).data.data[0];
     }
 
-    // Comuni
+    // Municipality-related methods
 
+    /**
+     * Lists all municipalities within a province
+     * @param provincia - The province code or name
+     */
     async listComuni(provincia: string) {
+        // TODO: Add error handling if provincia is not found or API fails
        return (await this.getProvincia(provincia)).dettaglio_comuni;
     }
 
+    /**
+     * Gets municipality data by ISTAT code
+     * @param code - The ISTAT statistical code
+     */
     async getFromIstatCode(code: string): Promise<any[]> {
+        // TODO: Validate ISTAT code format and handle not found cases with clear error messages
         return await (await this.client.get(this.url + '/istat/' + code)).data.data;
     }
 
+    /**
+     * Gets the full service URL based on environment
+     */
     get url() {
         return getBaseUrl(this.environment, this.baseUrl)
     }
