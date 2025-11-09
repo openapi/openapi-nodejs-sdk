@@ -121,4 +121,5 @@ dist
 .env*
 *.code-workspace
 .vscode
+.idea/
 /reference/
