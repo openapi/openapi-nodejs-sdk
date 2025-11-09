@@ -1,13 +1,16 @@
 {
   "name": "@altravia/openapi",
   "version": "1.4.2",
-  "description": "Official Openapi NodeJS Client",
+  "description": "Minimal HTTP client for OpenAPI marketplace - simplified SDK with basic HTTP methods",
   "main": "dist/index.js",
   "files": [
-    "dist"
+    "dist",
+    "LICENSE",
+    "README.md"
   ],
   "scripts": {
-    "test": "tsc && jest -config=jest.config.json --all",
+    "test": "tsc && jest test/minimal-client.test.js",
+    "test:all": "tsc && jest -config=jest.config.json --all",
     "build": "tsc",
     "tag": "git tag `npm view '@altravia/openapi' version`",
     "patch": "npm run build && npm version patch && npm run tag",
@@ -18,18 +21,23 @@
     "type": "git",
     "url": "https://github.com/openapi-it/Openapi-NodeJS"
   },
+  "bugs": {
+    "url": "https://github.com/openapi-it/OpenApi-NodeJS/issues"
+  },
   "author": "Altravia Srl",
   "license": "MIT",
   "private": false,
   "keywords": [
     "openapi",
-    "visura",
-    "ufficio postale",
-    "geocoding",
-    "altravia",
-    "comuni",
-    "pecmassiva",
-    "aziende italiane"
+    "api",
+    "client",
+    "sdk",
+    "http",
+    "rest",
+    "nodejs",
+    "typescript",
+    "marketplace",
+    "altravia"
   ],
   "dependencies": {
     "axios": "^0.21.2"
