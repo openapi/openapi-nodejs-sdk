@@ -8,7 +8,7 @@
 
   [![Node.js CI](https://github.com/openapi/openapi-nodejs-sdk/actions/workflows/node.js.yml/badge.svg)](https://github.com/openapi/openapi-nodejs-sdk/actions/workflows/node.js.yml)
   [![npm version](https://img.shields.io/npm/v/@altravia/openapi.svg)](https://www.npmjs.com/package/@altravia/openapi)
-  [![License](https://img.shields.io/github/license/openapi-it/openapi-nodejs-sdk?v=2)](LICENSE)
+  [![License](https://img.shields.io/github/license/openapi/openapi-nodejs-sdk?v=2)](LICENSE)
   [![Node.js Version](https://img.shields.io/badge/node-14+-green.svg)](https://nodejs.org/)
 </div>
 
