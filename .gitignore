@@ -121,3 +121,4 @@ dist
 .env*
 *.code-workspace
 .vscode
+/reference/
