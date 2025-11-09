@@ -18,9 +18,9 @@ export class OauthClient {
 
     constructor(username: string, apiKey: string, isTest: boolean = false) {
         this.baseUrl = isTest ? 'https://test.oauth.altravia.com' : 'https://oauth.altravia.com';
-        
+
         const auth = Buffer.from(`${username}:${apiKey}`).toString('base64');
-        
+
         this.client = axios.create({
             baseURL: this.baseUrl,
             headers: {

@@ -19,7 +19,7 @@
   "homepage": "https://developers.openapi.it",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openapi-it/OpenApi-NodeJS"
+    "url": "https://github.com/openapi-it/Openapi-NodeJS"
   },
   "bugs": {
     "url": "https://github.com/openapi-it/OpenApi-NodeJS/issues"
