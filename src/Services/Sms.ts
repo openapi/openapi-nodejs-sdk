@@ -17,6 +17,9 @@ export interface SmsRecipient {
     fields: any;
 }
 
+/**
+ * Service for sending and managing SMS messages
+ */
 export class Sms implements Service {
     client: AxiosInstance;
     readonly service = 'sms';
@@ -29,35 +32,49 @@ export class Sms implements Service {
     }
 
     /**
-     * @param id Se viene passato un id, ritorna un array contenente esclusivamente quel messaggio
-     * @returns Ritorna la lista di tutti i messaggi inviati
+     * Retrieves sent SMS messages
+     * @param id - Optional message ID to retrieve a specific message
+     * @returns Array of messages (all messages or single message if ID provided)
      */
     async getMessages(id?: string): Promise<Array<any>> {
-        const query = id ? `${id}` : '';
+        // TODO: Add error handling for invalid ID or API failures
+        const query = id ? \`\${id}\` : '';
         return await (await this.client.get(this.url + '/messages/' + query)).data.data;
     }
 
     /**
-     * 
-     * @param recipients Phone number of the recipient and wanting the 'fields' object in which to insert the parameters that we want to enter in the 'body' like this: {'number':'+39-34xxxxx987', 'fields':{'name':'simone', 'surname':'rossi'}}. Mandatory is the international prefix which must be separated from the rest by '-' like this: '+39-number'. Any other format will be considered bad recipients and placed among the invalid
-     * @todo Supporto per le transazioni 
+     * Sends SMS messages to one or more recipients
+     * @param sender - Sender name/number (3-12 chars for string, 3-14 for number)
+     * @param message - SMS text body (supports placeholders with recipient fields)
+     * @param recipients - Phone number(s) with international prefix (format: '+39-number')
+     * @param priority - Message priority (default: 1)
+     * @param options - Additional options (flash, scheduled send, callbacks, etc.)
+     * @param test - Whether this is a test message (default: false)
+     * @todo Add support for transactions
      */
-    async send(sender: string | number, message: string, recipients: string | Array<string | SmsRecipient>, 
+    async send(sender: string | number, message: string, recipients: string | Array<string | SmsRecipient>,
         priority: number = 1, options: SmsOptions, test: boolean = false,
     ): Promise<Array<any>> {
         if (typeof sender === 'string' && (sender.length > 12 || sender.length < 3)) {
+            // TODO: Replace string throw with proper Error object for better error handling
             throw 'sender length must be less than 12 chars and more than 3'
         }
 
         if (typeof sender === 'number' && (sender.toString().length > 14 || sender.toString().length < 3)) {
+            // TODO: Replace string throw with proper Error object for better error handling
             throw 'sender number length must be less than 14 chars and more than 3'
         }
 
+        // TODO: Add validation for recipients format and provide helpful error messages
+        // TODO: Handle API errors (invalid recipients, insufficient credits, etc.) with user-friendly messages
         return await (await this.client.post(this.url + '/messages/', JSON.stringify({
-            test, sender, recipients, body: message, transaction: false, priority 
+            test, sender, recipients, body: message, transaction: false, priority
         }))).data.data;
     }
 
+    /**
+     * Gets the full service URL based on environment
+     */
     get url() {
         return getBaseUrl(this.environment, this.baseUrl)
     }
