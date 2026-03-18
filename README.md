@@ -10,6 +10,8 @@
   [![npm version](https://img.shields.io/npm/v/@altravia/openapi.svg)](https://www.npmjs.com/package/@altravia/openapi)
   [![License](https://img.shields.io/github/license/openapi/openapi-nodejs-sdk?v=2)](LICENSE)
   [![Node.js Version](https://img.shields.io/badge/node-14+-green.svg)](https://nodejs.org/)
+  <br>
+[![Linux Foundation Member](https://img.shields.io/badge/Linux%20Foundation-Silver%20Member-003778?logo=linux-foundation&logoColor=white)](https://www.linuxfoundation.org/about/members)
 </div>
 
 ## Overview
@@ -201,6 +203,13 @@ Meet our partners using Openapi or contributing to this SDK:
 - [PWC](https://www.pwc.com/)
 - [QOMODO S.R.L.](https://www.qomodo.me/)
 - [SOUNDREEF S.P.A.](https://www.soundreef.com/)
+
+## Our Commitments
+
+We believe in open source and we act on that belief. We became Silver Members 
+of the Linux Foundation because we wanted to formally support the ecosystem 
+we build on every day. Open standards, open collaboration, and open governance 
+are part of how we work and how we think about software.
 
 ## License
 
