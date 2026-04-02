@@ -36,11 +36,9 @@ test('init', async function() {
 })
 
 test('initWithString', async function() {
-    
     let client = await Openapi.init('production', process.env.OPENAPI_USERNAME, process.env.API_KEY);
     const token = await client.generateToken('imprese.altravia.com');
     expect(typeof token === 'string').toBeTruthy()
-    console.log(client.scopes);
 })
 
 test('initWithToken', async function() {
@@ -84,17 +82,15 @@ test('testComuni', async function() {
 
     const cap = await client.comuni.getCitiesByCap('00121')
     expect(cap[0].regione).toBe('Lazio');
-    
+
     const province = await client.comuni.listProvince();
     expect(province.MI).toBeDefined();
 
     const comuni = await client.comuni.listComuni('MI');
     expect(comuni[0]).toBeDefined();
-    
+
     const istat = await client.comuni.getFromIstatCode('055032');
     expect(istat).toBeDefined();
-
-    console.log(cap, province, comuni);
 })
 
 test('testImprese', async function() {
@@ -103,22 +99,18 @@ test('testImprese', async function() {
 
     const piva = await client.imprese.getByPartitaIva('12485671007')
     expect(piva).toBeDefined();
-    console.log(piva);
-    
+
     const pivaAvd = await client.imprese.getAdvancedByPartitaIva('12485671007')
     expect(pivaAvd).toBeDefined();
-  
+
     const pec = await client.imprese.getPec('12485671007')
     expect(pec).toBeDefined();
-    console.log(pec);
 
-    const imprese = await client.imprese.search({ provincia: 'RM' })  
-   expect(imprese).toBeDefined();
-    console.log(imprese);
+    const imprese = await client.imprese.search({ provincia: 'RM' })
+    expect(imprese).toBeDefined();
 
     const auto = await client.imprese.autocomplete('pizzeria')
     expect(auto).toBeDefined()
-    console.log(auto);
 
     const fg = await client.imprese.listFormeGiuridiche()
     expect(fg).toBeDefined()
@@ -145,7 +137,6 @@ test('testFD', async function() {
     
     const listaFirmaElettroniche = await client.firmaDigitale.listFirmaElettronica();
     expect(listaFirmaElettroniche).toBeDefined();
-    console.log(listaFirmaElettroniche);
 
     const pdf = await fs.promises.readFile(__dirname + '/resources/testosemplice.pdf')
     const newFirmaElettronica =  await client.firmaDigitale.createFirmaElettronica('test.pdf', pdf.toString('base64'), [
@@ -176,7 +167,6 @@ test('testValutometro', async function() {
 
     const q = await client.valutometro.quote('via del rivo 10 Terni', '20', 'sale')
     expect(q).toBeDefined()
-    console.log(q);
 })
 
 test('testVisengine', async function() {
@@ -185,7 +175,7 @@ test('testVisengine', async function() {
     expect(s[0]).toBeDefined()
 
     const visuraDescription = await client.visengine.getServiceDescription(s[0].hash_visura)
-    console.log(JSON.stringify(visuraDescription, null, 2));
+    expect(visuraDescription).toBeDefined();
 
     const json_visura = {'$0': 'test', '$1': 'lorem ipsum'}
     const callback = {
@@ -193,8 +183,8 @@ test('testVisengine', async function() {
         method: 'POST',
         field: 'data',
     }
-    const visura = await client.visengine.createRequest(s[0].hash_visura, json_visura, {}, callback,null, 'close', true);
-    console.log(visura);
+    const visura = await client.visengine.createRequest(s[0].hash_visura, json_visura, {}, callback, null, 'close', true);
+    expect(visura).toBeDefined();
 })
 
 
@@ -204,7 +194,6 @@ test('testsms', async function() {
     // console.log(list);
     const sms = await client.sms.send('test', 'Test sms', ['+39-3939989741'], 0, {}, true)
     expect(sms).toBeDefined()
-    console.log(JSON.stringify(sms, null, 2));
 })
 
 test('testUP', async function() {
