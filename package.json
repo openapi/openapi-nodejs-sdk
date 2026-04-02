@@ -40,8 +40,7 @@
     "altravia"
   ],
   "dependencies": {
-    "axios": "^0.21.2",
-    "axios-retry-plus": "^2.3.1"
+    "axios": "^0.21.2"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.14.5",
