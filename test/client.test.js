@@ -1,4 +1,3 @@
-// import Openapi from '../dist/index';
 const fs = require('fs');
 let Openapi = require('../dist/index').default;
 
@@ -29,7 +28,7 @@ const scopes = [
 ];
 
 test('init', async function() {
-    
+
     let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
     const token = await client.generateToken(scopes);
     expect(typeof token === 'string').toBeTruthy()
@@ -47,9 +46,9 @@ test('initWithToken', async function() {
 })
 
 test('initWithOldToken', async function() {
-    
+
     let client = new Openapi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
-    
+
     const token = process.env.OLD_TOKEN;
     expect(typeof token === 'string').toBe(true);
 
@@ -57,9 +56,9 @@ test('initWithOldToken', async function() {
 })
 
 test('initWithSkip', async function() {
-    
+
     let client = new Openapi('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
-    
+
     const token = process.env.TOKEN;
     expect(typeof token === 'string').toBe(true);
 
@@ -76,9 +75,8 @@ test('initWithSkip', async function() {
 test('testComuni', async function() {
     const token = process.env.TOKEN;
     expect(typeof token === 'string').toBe(true);
-    
+
     let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, token);
-    
 
     const cap = await client.comuni.getCitiesByCap('00121')
     expect(cap[0].regione).toBe('Lazio');
@@ -94,8 +92,7 @@ test('testComuni', async function() {
 })
 
 test('testImprese', async function() {
-     let client = await Openapi.init('production', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
-    console.log(JSON.stringify(client.scopes, null, 2));
+    let client = await Openapi.init('production', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
 
     const piva = await client.imprese.getByPartitaIva('12485671007')
     expect(piva).toBeDefined();
@@ -125,28 +122,19 @@ test('testPa', async function() {
 
 test('testFD', async function() {
     let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
-    // const prodotti = await client.firmaDigitale.getProducts();
-    // expect(prodotti).toBeDefined();
 
-    // const richiesta  = await client.firmaDigitale.requestProduct('RINFIR', {})
-    // expect(richiesta.id).toBeDefined()
-
-    // const infoRichiesta = await client.firmaDigitale.getRequest(richiesta.id)
-    // expect(infoRichiesta).toBeDefined()
-    // console.log(infoRichiesta);
-    
     const listaFirmaElettroniche = await client.firmaDigitale.listFirmaElettronica();
     expect(listaFirmaElettroniche).toBeDefined();
 
-    const pdf = await fs.promises.readFile(__dirname + '/resources/testosemplice.pdf')
-    const newFirmaElettronica =  await client.firmaDigitale.createFirmaElettronica('test.pdf', pdf.toString('base64'), [
+    const pdf = await fs.promises.readFile(__dirname + '/resources/attachment.pdf')
+    const newFirmaElettronica = await client.firmaDigitale.createFirmaElettronica('test.pdf', pdf.toString('base64'), [
         {
             'firstname': 'test',
             'lastname': 'test',
             'email': 'test@altravia.com',
             'phone': '+39321321321',
         }
-    ]).catch(e => console.log(e))
+    ]).catch(() => {})
 
     expect(newFirmaElettronica).toBeDefined();
 })
@@ -161,7 +149,7 @@ test('testValutometro', async function() {
     let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
     const p = await client.valutometro.listPropertyTypes()
     expect(p[0]).toBeDefined()
-    
+
     const c = await client.valutometro.listContractTypes()
     expect(c[0]).toBeDefined()
 
@@ -187,101 +175,20 @@ test('testVisengine', async function() {
     expect(visura).toBeDefined();
 })
 
-
 test('testsms', async function() {
     let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
-    // const list = await client.sms.getMessages()
-    // console.log(list);
     const sms = await client.sms.send('test', 'Test sms', ['+39-3939989741'], 0, {}, true)
     expect(sms).toBeDefined()
 })
 
 test('testUP', async function() {
     let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY, process.env.TOKEN);
-    // const list = await client.ufficioPostale.listRaccomandate('NEW')
-    // expect(list).toBeDefined()
-    const mitt = {
-        "titolo": "mr",
-        "nome": "Simone",
-        "dug": "SST",
-        "indirizzo": "Valnerina",
-        "civico": "1",
-        "comune": "montefranco",
-        "cap": "05030",
-        "provincia": "tr",
-        "nazione": "Italia",
-        "email": "s.desantis@altravia.com",
-        "ragione_sociale": "privato",
-        "cognome": "xxx"
-    }
-
-    const dest = {
-        "nome": "Simone",
-        "cognome": "Desantis",
-        "co": "Altravia Servizi SRL",
-        "dug": "piazza",
-        "indirizzo": "San Giovanni Decollato",
-        "civico": "6",
-        "comune": "Terni",
-        "cap": "05100",
-        "provincia": "TR",
-        "nazione": "Italia"
-    }
-
-    // const comuni = await client.ufficioPostale.comuni('00143')
-    // expect(comuni).toBeDefined()
-    // console.log(comuni);
-
-    // const r = await client.ufficioPostale.createRaccomandata(mitt, [dest], ['Test'], false).catch(e => console.log(e))
-    // const result = await client.ufficioPostale.confirmRaccomandata(r[0].id).catch(e => console.log(e))
-    // expect(result).toBeDefined()
-    // console.log(result);
-
-    // const t = await client.ufficioPostale.createTelegramma(mitt, [dest], 'Test', false)
-    // const resultTelegramma = await client.ufficioPostale.confirmTelegramma(t[0].id).catch(e => console.log(e))
-    // expect(resultTelegramma).toBeDefined()
-    // console.log(resultTelegramma);
-
-    // const pricing = await client.ufficioPostale.pricing().catch(e => console.log(e))
-    // expect(pricing).toBeDefined()
-    // console.log(pricing);
-
-    // const dugs = await client.ufficioPostale.listDug().catch(e => console.log(e))
-    // expect(dugs).toBeDefined()
-    // console.log(dugs)
+    expect(client.ufficioPostale).toBeDefined()
 })
 
 test('testUPlol', async function() {
     let client = await Openapi.init('test', process.env.OPENAPI_USERNAME, process.env.API_KEY);
     await client.generateToken('ws.ufficiopostale.com');
-    const mitt = {
-        "titolo": "mr",
-        "nome": "Simone",
-        "dug": "SST",
-        "indirizzo": "Valnerina",
-        "civico": "1",
-        "comune": "montefranco",
-        "cap": "05030",
-        "provincia": "tr",
-        "nazione": "Italia",
-        "email": "s.desantis@altravia.com",
-        "ragione_sociale": "privato",
-        "cognome": "xxx"
-    }
-
-    const dest = {
-        "nome": "Simone",
-        "cognome": "Desantis",
-        "co": "Altravia Servizi SRL",
-        "dug": "piazza",
-        "indirizzo": "San Giovanni Decollato",
-        "civico": "6",
-        "comune": "Terni",
-        "cap": "05100",
-        "provincia": "TR",
-        "nazione": "Italia"
-    }
-
     const list = await client.ufficioPostale.listOrdinarie();
-    console.log(list);
+    expect(list).toBeDefined();
 })
