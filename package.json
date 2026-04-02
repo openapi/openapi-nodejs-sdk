@@ -40,7 +40,8 @@
     "altravia"
   ],
   "dependencies": {
-    "axios": "^0.21.2"
+    "axios": "^0.21.2",
+    "response-schema-lite": "^1.0.4"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.14.5",
